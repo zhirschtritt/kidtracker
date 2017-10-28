@@ -1,13 +1,14 @@
 source 'https://rubygems.org/'
 
+gem 'omniauth-google-oauth2'
 gem 'pg', '~> 0.18'
 gem 'puma', '~> 3.7'
 gem 'rails', '~> 5.1.2'
-gem 'react_on_rails', "~> 10.0.0"
+gem 'react_on_rails', '~> 10.0.0'
 gem 'sass-rails', '~> 5.0'
 gem 'semantic-ui-sass'
 gem 'uglifier', '>= 1.3.0'
-gem 'webpacker', "~> 3.0"
+gem 'webpacker', '~> 3.0'
 
 group :development do
   gem 'listen', '~> 3.0.5'
@@ -16,8 +17,10 @@ group :development do
 end
 
 group :development, :test do
+  gem 'byebug'
   gem 'capybara'
-  gem 'factory_girl_rails'
+  gem 'dotenv-rails'
+  gem 'factory_bot_rails'
   gem 'launchy', require: false
   gem 'pry-rails'
   gem 'rspec-rails', '~> 3.5'
