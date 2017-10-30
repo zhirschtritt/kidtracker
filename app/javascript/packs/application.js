@@ -7,6 +7,12 @@
 // To reference this file, add <%= javascript_pack_tag 'application' %> to the appropriate
 // layout file, like app/views/layouts/application.html.erb
 
+import ReactOnRails from 'react-on-rails';
+import LogIn from '../bundles/components/LogIn';
 
+window.$ = window.jQuery = require('jquery');
 
-console.log('Hello World from Webpacker');
+// This is how react_on_rails can see the HelloWorld in the browser.
+ReactOnRails.register({
+  LogIn,
+});

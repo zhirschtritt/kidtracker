@@ -11,6 +11,7 @@ class User < ApplicationRecord
       first_name: auth[:info][:first_name],
       last_name: auth[:info][:last_name],
       token: auth[:credentials][:token],
+      refresh_token: auth[:credentials][:refresh_token],
       oauth_expires_at: Time.at(auth[:credentials][:expires_at]),
       picture: auth[:extra][:raw_info][:picture]
     }
