@@ -1,4 +1,7 @@
 class User < ApplicationRecord
+  has_many :orgs_users
+  has_many :organizations, through: :organizations_users
+
   def self.update_or_create(auth)
     user = User.find_by(uid: auth[:uid]) || User.new
     user.attributes = {
@@ -14,4 +17,6 @@ class User < ApplicationRecord
     user.save!
     user
   end
+
+
 end
