@@ -14,6 +14,17 @@ class Api::V1::OrganizationsController < ApplicationController
     render_post_response(organization)
   end
 
+  def select
+    user = User.find(current_user.id)
+    organization = Organization.find(params[:organization_id])
+    user.organization_id = organization.id
+    if user.save
+      render json: { status: :ok, selected_organization_id: organization.id }
+    else
+      render json: { status: :unprocessable_entity, message: user.errors }
+    end
+  end
+
   private
 
   def render_post_response(organization)
