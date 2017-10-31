@@ -1,5 +1,6 @@
 source 'https://rubygems.org/'
 
+gem 'jwt', '~>1.5'
 gem 'omniauth-google-oauth2'
 gem 'pg', '~> 0.18'
 gem 'puma', '~> 3.7'

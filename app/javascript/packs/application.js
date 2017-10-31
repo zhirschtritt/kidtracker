@@ -6,13 +6,14 @@
 //
 // To reference this file, add <%= javascript_pack_tag 'application' %> to the appropriate
 // layout file, like app/views/layouts/application.html.erb
+//= require jquery
+//= require jquery_ujs
 
 import ReactOnRails from 'react-on-rails';
-import LogIn from '../bundles/components/LogIn';
+import KidTracker from '../KidTracker';
 
 window.$ = window.jQuery = require('jquery');
 
-// This is how react_on_rails can see the HelloWorld in the browser.
 ReactOnRails.register({
-  LogIn,
+  KidTracker,
 });

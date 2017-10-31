@@ -1,5 +1,5 @@
 class User < ApplicationRecord
-  has_many :orgs_users
+  has_many :organizations_users
   has_many :organizations, through: :organizations_users
 
   def self.update_or_create(auth)

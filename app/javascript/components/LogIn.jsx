@@ -34,11 +34,6 @@ export default class LogIn extends React.Component {
       <div>
         {login}
         {logout}
-
-        <h3>
-          Hello, {this.state.current_user.first_name}!
-        </h3>
-
       </div>
     );
   }
