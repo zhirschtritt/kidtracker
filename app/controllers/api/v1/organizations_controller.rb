@@ -4,8 +4,7 @@ class Api::V1::OrganizationsController < ApplicationController
   before_action :authenticate_user
 
   def index
-    user = User.find(current_user.id)
-    organizations = user.organizations
+    organizations = current_user.organizations
     render json: organizations
   end
 
@@ -15,13 +14,25 @@ class Api::V1::OrganizationsController < ApplicationController
   end
 
   def select
-    user = User.find(current_user.id)
-    organization = Organization.find(params[:organization_id])
-    user.organization_id = organization.id
-    if user.save
-      render json: { status: :ok, selected_organization_id: organization.id }
+    user_id = current_user.id
+    organization_id = params[:organization_id]
+    orgs_users = OrganizationsUser.where(user_id: user_id)
+
+    orgs_users.each do |org_user|
+      if org_user.organization_id == organization_id
+        OrganizationsUser.update(org_user.id, default_organization: true)
+      else
+        OrganizationsUser.update(org_user.id, default_organization: false)
+      end
+    end
+    org_id = OrganizationsUser.where(
+      user_id: user_id,
+      default_organization: true)[0].organization_id
+
+    if org_id == organization_id
+      render json: { status: :ok, selected_organization_id: org_id }
     else
-      render json: { status: :unprocessable_entity, message: user.errors }
+      render json: { status: :unprocessable_entity, message: organizations_users.errors }
     end
   end
 

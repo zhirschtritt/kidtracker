@@ -61,14 +61,13 @@ class App extends React.Component {
     }).catch(err => console.log(err));
   }
 
-
   componentDidMount() {
     this.loadOrganizations();
   }
 
   render() {
     console.log(this.state);
-    
+
     let org_form = "";
     if (!this.state.loading) {
       org_form =
@@ -92,12 +91,12 @@ class App extends React.Component {
        <div className='existing-orgs'>
          {org_form}
          <div>SELCT ORG:</div>
-         <Dropdown placeholder="select current organization"
-                 options={orgs}
-                 selection
-                 value={this.state.selectedOrganization}
-                 onChange={this.setSelectedOrganization}
-               />
+         <Dropdown
+           options={orgs}
+           selection
+           value={this.state.selectedOrganization}
+           onChange={this.setSelectedOrganization}
+         />
          <LocationContainer locations={this.state.locations} />
        </div>
      );

@@ -8,10 +8,16 @@ class LocationContainer extends React.Component {
     };
   }
 
+  componentWillReceiveProps(nextProps) {
+    this.setState({
+      locations: nextProps.locations
+    });
+  }
+
   render() {
     const locations = this.state.locations.map(location => {
       return (
-          <div key={location.key}>{location.name}</div>
+          <div key={location.id}>{location.name}</div>
       );
     });
 
