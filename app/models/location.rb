@@ -5,4 +5,9 @@ class Location < ApplicationRecord
 
   validates :name, presence: true
 
+  def current_kid_attendance
+    Kid.all.select do |kid|
+      kid.current_location.id == id
+    end
+  end
 end

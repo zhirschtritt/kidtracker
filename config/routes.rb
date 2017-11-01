@@ -4,7 +4,6 @@ Rails.application.routes.draw do
   get 'auth/google_oauth2/callback', to: 'sessions#create'
   get 'logout', to: 'sessions#destroy'
 
-
   namespace :api do
     namespace :v1 do
       get 'organizations' => 'organizations#index'
@@ -12,6 +11,8 @@ Rails.application.routes.draw do
       patch 'organizations/select' => 'organizations#select'
       get 'locations' => 'locations#index'
       post 'locations' => 'locations#create'
+      get 'org_sessions' => 'org_sessions#index'
+      get 'session_rosters/:id' => 'session_rosters#index'
     end
   end
 
