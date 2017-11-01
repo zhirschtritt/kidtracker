@@ -1,4 +1,6 @@
 import React from 'react';
+import LocationTile from './LocationTile';
+import { Grid } from 'semantic-ui-react';
 
 class LocationContainer extends React.Component {
   constructor(props) {
@@ -17,14 +19,21 @@ class LocationContainer extends React.Component {
   render() {
     const locations = this.state.locations.map(location => {
       return (
-          <div key={location.id}>{location.name}</div>
+
+            <Grid.Column key={location.id}>
+              <LocationTile
+                id={location.id}
+                name={location.name}
+              />
+            </Grid.Column>
+
       );
     });
 
     return(
-      <div>
-        {locations}
-      </div>
+      <Grid columns='equal' >
+          {locations}
+      </Grid>
     );
   }
 }

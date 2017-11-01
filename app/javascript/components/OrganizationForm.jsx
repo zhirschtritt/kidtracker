@@ -6,7 +6,6 @@ import axios from 'axios';
 export default class OrganzationForm extends React.Component {
   constructor(props) {
     super(props);
-    console.log("loadedOrgForm");
     this.state = {
       name: "",
       description: "",

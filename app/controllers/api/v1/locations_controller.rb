@@ -7,6 +7,7 @@ class Api::V1::LocationsController < ApplicationController
     organization_id = OrganizationsUser.where(user_id: current_user.id, default_organization: true)[0].organization_id
     organization = Organization.find(organization_id)
     locations = organization.locations
+    
     render json: { status: :ok, locations: locations}
   end
 
