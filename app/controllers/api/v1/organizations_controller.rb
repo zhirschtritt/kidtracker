@@ -5,7 +5,15 @@ class Api::V1::OrganizationsController < ApplicationController
 
   def index
     organizations = current_user.organizations
-    render json: organizations
+    default_organization = OrganizationsUser.where(
+      user_id: current_user.id,
+      default_organization: true)[0].organization
+
+    render json: {
+      status: :ok,
+      organizations: organizations,
+      default_organization: default_organization
+    }
   end
 
   def create
@@ -16,6 +24,10 @@ class Api::V1::OrganizationsController < ApplicationController
   def select
     user_id = current_user.id
     organization_id = params[:organization_id]
+
+    #ENCAPSULATE THE BELOW LOGIC IN INSTANCE METHOD
+    # OrganizationsUser.update_default_org(user_id: user_id, organization_id: organization_id)
+
     orgs_users = OrganizationsUser.where(user_id: user_id)
 
     orgs_users.each do |org_user|

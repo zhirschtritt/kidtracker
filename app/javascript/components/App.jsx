@@ -37,7 +37,11 @@ class App extends React.Component {
   loadOrganizations() {
     axios.get('/api/v1/organizations')
     .then(response => {
-      this.setState({ organizations: response.data, loading: false });
+      console.log(response);
+      this.setState({
+        organizations: response.data.organizations,
+        selectedOrganization: response.data.default_organization.name,
+        loading: false });
       }).catch(err => console.log(err));
   }
 
@@ -66,8 +70,6 @@ class App extends React.Component {
   }
 
   render() {
-    console.log(this.state);
-
     let org_form = "";
     if (!this.state.loading) {
       org_form =
@@ -80,7 +82,7 @@ class App extends React.Component {
     const orgs = this.state.organizations.map(org => (
       {
         id: org.id,
-        ref: org.id,
+
         key: org.name,
         value: org.id,
         text: org.name,
@@ -94,7 +96,7 @@ class App extends React.Component {
          <Dropdown
            options={orgs}
            selection
-           value={this.state.selectedOrganization}
+           selected={this.state.selectedOrganization}
            onChange={this.setSelectedOrganization}
          />
          <LocationContainer locations={this.state.locations} />
