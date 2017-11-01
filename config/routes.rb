@@ -9,6 +9,9 @@ Rails.application.routes.draw do
     namespace :v1 do
       get 'organizations' => 'organizations#index'
       post 'organizations' => 'organizations#create'
+      patch 'organizations/select' => 'organizations#select'
+      get 'locations' => 'locations#index'
+      post 'locations' => 'locations#create'
     end
   end
 
