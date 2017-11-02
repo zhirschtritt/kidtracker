@@ -1,78 +1,67 @@
-import React, { Component } from 'react';
-import { Dropdown, Icon, Menu, Segment } from 'semantic-ui-react';
+import React from 'react';
+import AppBar from 'material-ui/AppBar';
+import Drawer from 'material-ui/Drawer';
+import FlatButton from 'material-ui/FlatButton';
+import { List, ListItem } from 'material-ui/List';
+import { IndexLink, Link, browserHistory } from 'react-router';
 
-class NavBar extends Component {
+const style = {
+  title: {
+    cursor: 'pointer'
+  }
+};
+
+class NavBar extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      organizations: props.organizations,
-      selectedOrganization: props.selectedOrganization,
+      open: false,
+      organizations: this.props.organizations,
+      selectedOrganization: this.props.defaultOrganization,
     };
+    this.handleTitleTouchTap = this.handleTitleTouchTap.bind(this);
+    this.handleToggle = this.handleToggle.bind(this);
   }
 
-  componentWillReceiveProps(nextProps) {
-    this.setState({
-      organizations: nextProps.organizations,
-      selectedOrganization: nextProps.selectedOrganization,
-    });
-  }
+    handleTitleTouchTap() {
+      browserHistory.push('/');
+    }
+
+    handleToggle() {
+    this.setState({ open: !this.state.open });
+    }
 
   render() {
-    const organizations = this.state.organizations.map(org => (
-      <Dropdown.Item
-        onClick={this.props.setSelectedOrganization}
-        key={org.id}
-        id={org.id}
-        value={org.id}
-        color='teal'
-        active={this.state.selectedOrganization.id === org.id}
-        >{org.name}
-      </Dropdown.Item>
-    ));
 
-    const selectedOrganization = this.state.selectedOrganization;
-    const displayOrganization =
-      {
-        id: selectedOrganization.id,
-        value: selectedOrganization.id,
-        text: selectedOrganization.name
-      };
+    const loginOut = <FlatButton label="Logout" />;
 
     return (
       <div>
-        <Menu attached='top'>
-          <Dropdown item icon='wrench' simple>
-            <Dropdown.Menu>
-              <Dropdown.Item>
-                <Icon name='dropdown' />
-                <span className='text'>Select Organization</span>
-                <Dropdown.Menu
-                  selection={displayOrganization}
-                  selected={displayOrganization}
-                >
-                  <Dropdown.Item>
-                    <span className='text'>New Organization</span>
-                  </Dropdown.Item>
-                  <Dropdown.Divider />
-                  {organizations}
-              </Dropdown.Menu>
-              </Dropdown.Item>
-              <Dropdown.Divider />
-              <Dropdown.Header>Export</Dropdown.Header>
-              <Dropdown.Item>Share</Dropdown.Item>
-            </Dropdown.Menu>
-          </Dropdown>
-
-          <Menu.Item name='selectedOrganization'>
-            {this.state.selectedOrganization.name}
-          </Menu.Item>
-
-          <Menu.Menu position='right'>
-            <Menu.Item name="logout">
-              <a href="logout">Log Out</a>
-            </Menu.Item>
-          </Menu.Menu>
-        </Menu>
+        <AppBar
+          onLeftIconButtonTouchTap={this.handleToggle}
+          title={<span style={style.title}>KidTracker</span>}
+          onTitleTouchTap={this.handleTitleTouchTap}
+          iconElementRight={loginOut}
+        />
+        <Drawer
+          docked={false}
+          width={200}
+          open={this.state.open}
+          onRequestChange={(open) => this.setState({ open })}
+        >
+          <List>
+            <ListItem
+              containerElement={<IndexLink to="/" />}
+              onClick={this.handleToggle}
+              primaryText="KidTracker"
+            />
+            <ListItem
+              containerElement={<Link to="/about" />}
+              onClick={this.handleToggle}
+              primaryText="About"
+            />
+          </List>
+        </Drawer>
       </div>
     );
   }
