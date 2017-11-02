@@ -5,9 +5,7 @@ class Api::V1::OrganizationsController < ApplicationController
 
   def index
     organizations = current_user.organizations
-    default_organization = OrganizationsUser.where(
-      user_id: current_user.id,
-      default_organization: true)[0].organization
+    default_organization = Organization.default_organization(current_user)
 
     render json: {
       status: :ok,
@@ -27,12 +25,11 @@ class Api::V1::OrganizationsController < ApplicationController
   end
 
   def select
-    user_id = current_user.id
     organization = Organization.find(params[:organization_id])
 
     #ENCAPSULATE THE BELOW LOGIC IN INSTANCE METHOD
 
-    orgs_users = OrganizationsUser.where(user_id: user_id)
+    orgs_users = OrganizationsUser.where(user_id: current_user.id)
 
     orgs_users.each do |org_user|
       if org_user.organization_id == organization.id
@@ -41,15 +38,8 @@ class Api::V1::OrganizationsController < ApplicationController
         OrganizationsUser.update(org_user.id, default_organization: false)
       end
     end
-    org_id = OrganizationsUser.where(
-      user_id: user_id,
-      default_organization: true)[0].organization.id
 
-    if org_id == organization.id
-      render json: { status: :ok, selected_organization: organization}
-    else
-      render json: { status: :unprocessable_entity, message: organizations_users.errors }
-    end
+    render json: { status: :ok, selected_organization: default_organization}
   end
 
   private

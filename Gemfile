@@ -10,6 +10,7 @@ gem 'sass-rails', '~> 5.0'
 gem 'semantic-ui-sass'
 gem 'uglifier', '>= 1.3.0'
 gem 'webpacker', '~> 3.0'
+gem 'active_model_serializers'
 
 group :development do
   gem 'listen', '~> 3.0.5'

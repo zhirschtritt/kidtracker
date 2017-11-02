@@ -8,23 +8,45 @@
 
 require 'faker'
 
+Organization.create!(
+  name: "Parts and Crafts"
+)
+
+OrganizationsUser.create!(
+  user: User.first,
+  organization: Organization.first
+)
+
+Location.create!(
+  name: "577",
+  organization: Organization.first
+)
+Location.create!(
+  name: "Park",
+  organization: Organization.first
+)
+Location.create!(
+  name: "Kesher",
+  organization: Organization.first
+)
+
 OrgSession.create!(
   name: "Things that Move",
   start_date: Date.parse('2018-07-14'),
   end_date: Date.parse('2018-07-24'),
-  organization: Organization.find(1)
+  organization: Organization.first
   )
 OrgSession.create!(
   name: "Life: Natural and Artificial",
   start_date: Date.parse('2018-07-25'),
   end_date: Date.parse('2018-08-05'),
-  organization: Organization.find(1)
+  organization: Organization.first
   )
 OrgSession.create!(
   name: "Imaginary Worlds",
   start_date: Date.parse('2018-08-06'),
   end_date: Date.parse('2018-08-16'),
-  organization: Organization.find(1)
+  organization: Organization.first
   )
 
 30.times do
@@ -44,7 +66,7 @@ end
 
 100.times do
   Event.create!(
-    location: Location.where(organization_id: 1).sample,
+    location: Location.where(organization_id: Organization.first.id).sample,
     kid: Kid.all.sample
   )
 end

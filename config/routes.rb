@@ -11,8 +11,8 @@ Rails.application.routes.draw do
       patch 'organizations/select' => 'organizations#select'
       get 'locations' => 'locations#index'
       post 'locations' => 'locations#create'
-      get 'org_sessions' => 'org_sessions#index'
-      get 'session_rosters/:id' => 'session_rosters#index'
+      get 'kids' => 'kids#index'
+      post 'event' => 'event#new'
     end
   end
 

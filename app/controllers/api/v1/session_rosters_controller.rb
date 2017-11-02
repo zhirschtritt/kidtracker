@@ -5,8 +5,8 @@ class Api::V1::SessionRostersController < ApplicationController
 
   def index
     current_session_id = params[:id]
-    kid_roster = OrgSession.find(current_session_id).kids
-    render json: { status: :ok, kid_roster: kid_roster}
+    roster = OrgSession.find(current_session_id).kids
+    render json: { status: :ok, roster: roster}
   end
 
   private

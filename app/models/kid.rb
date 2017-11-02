@@ -11,9 +11,14 @@ class Kid < ApplicationRecord
   validates :dob, presence: true
 
   def current_location
-    last_event = Event.where(["kid_id = ?", id]).last
-    last_event.location
+    if Event.where(kid_id: id).exists?
+      last_event = Event.where(["kid_id = ?", id]).last
+      return last_event.location
+    else
+      return "NOT CHECKED IN"
+    end
   end
+
 
   def age
     now = Date.today

@@ -7,6 +7,7 @@ class Location < ApplicationRecord
 
   def current_kid_attendance
     Kid.all.select do |kid|
+      next if kid.current_location == "NOT CHECKED IN"
       kid.current_location.id == id
     end
   end
