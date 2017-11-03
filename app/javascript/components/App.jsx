@@ -8,9 +8,9 @@ import LocationsContainer from './LocationsContainer';
 import axios from 'axios';
 
 const styles = {
-  root: {
-    display: 'float',
-    alignItems: 'center',
+  searchBox: {
+    display: 'flex',
+    justifyContent: 'center',
   },
   search: {
     padding: 10,
@@ -21,8 +21,9 @@ const styles = {
   },
   paper: {
     marginTop: 10,
-    textAlign: 'center',
-    display: 'inline-block',
+    display: 'flex',
+    justifyContent: 'center',
+    width: "75%"
   }
 };
 
@@ -72,7 +73,8 @@ class App extends React.Component {
     ));
 
     return (
-      <div style={styles.root}>
+      <div>
+        <div style={styles.searchBox}>
         <Paper style={styles.paper} zDepth={1} rounded={false}>
           <AutoComplete
             style={styles.search}
@@ -97,6 +99,7 @@ class App extends React.Component {
               {locationOptions}
             </DropDownMenu>
           </Paper>
+        </div>
             <LocationsContainer locations={this.state.locations} />
         </div>
       );

@@ -5,13 +5,14 @@ import Divider from 'material-ui/Divider';
 import Avatar from 'material-ui/Avatar';
 import {pinkA200, transparent} from 'material-ui/styles/colors';
 import IconButton from 'material-ui/IconButton';
-import StarBorder from 'material-ui/svg-icons/toggle/star-border';
 import Chip from 'material-ui/Chip';
 import FontIcon from 'material-ui/FontIcon';
 import SvgIconFace from 'material-ui/svg-icons/action/face';
 import {blue300, indigo900} from 'material-ui/styles/colors';
 import Dialog from 'material-ui/Dialog';
+import Subheader from 'material-ui/Subheader';
 import FlatButton from 'material-ui/FlatButton';
+import Paper from 'material-ui/Paper';
 import RaisedButton from 'material-ui/RaisedButton';
 
 const styles = {
@@ -20,15 +21,18 @@ const styles = {
     flexDirection: 'row',
     margin: '20px',
   },
-  gridItem: {
+  locationColumn: {
     flexGrow: 1,
-    flexWrap: 'nowrap',
+    flexWrap: 'wrap',
+    margin: 10
   },
   chip: {
     margin: 4,
   },
-  titleStyle: {
+  title: {
     color: 'rgb(0, 188, 212)',
+    display: 'flex',
+    justifyContent: 'center',
   },
 };
 
@@ -39,6 +43,7 @@ class LocationsContainer extends React.Component {
       open: false,
     };
   }
+
   handleOpen = (e) => {
     this.setState({open: true});
   };
@@ -66,40 +71,40 @@ class LocationsContainer extends React.Component {
 
     const locations = this.props.locations.map(location => {
       return(
-        <List key={location.id}>
-          <h3>{location.name}</h3>
+        <Paper zDepth={2} style={styles.locationColumn} key={location.id}>
+          <List>
+            <div style={styles.title}>
+              <h2>{location.name}</h2>
+            </div>
             {location.kids.map(kid => (
               <ListItem
+                primaryText={kid.first_name + ' ' + kid.last_name}
+                secondaryText="time since kid arrived"
                 key={kid.id}
-                >
-                <Chip
-                  onClick={e=>this.handleOpen(e)}
-                  value={kid}
-                  style={styles.chip}
-                >
-                  <Avatar size={32} color={blue300} backgroundColor={indigo900}>
-                    {kid.first_name[0]}
-                  </Avatar>
-                  {kid.first_name + ' ' + kid.last_name}
-                </Chip>
+                onClick={e=>this.handleOpen(e)}
+                value={kid}
+              >
               </ListItem>
             ))}
-        </List>
+          </List>
+        </Paper>
       );
 
     });
     return(
-      <div style={styles.root}>
-          {locations}
-      <Dialog
-        title="Kid Info"
-        actions={actions}
-        modal={false}
-        open={this.state.open}
-        onRequestClose={this.handleClose}
-        >
-        <h3>WOW! So much info about this kid! Just look at it all!</h3>
-      </Dialog>
+      <div>
+        <div style={styles.root}>
+            {locations}
+        </div>
+        <Dialog
+          title="Kid Info"
+          actions={actions}
+          modal={false}
+          open={this.state.open}
+          onRequestClose={this.handleClose}
+          >
+            <h3>WOW! So much info about this kid! Just look at it all!</h3>
+        </Dialog>
       </div>
     );
   }
