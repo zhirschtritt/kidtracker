@@ -33,7 +33,14 @@ class NavBar extends React.Component {
 
   render() {
 
-    const loginOut = <FlatButton label="Logout" />;
+    let loginOut =
+      <FlatButton label="Login with Google" />;
+
+    if (this.props.user != {}) {
+      loginOut =
+      <FlatButton  label="Logout" />;
+    }
+
 
     return (
       <div>

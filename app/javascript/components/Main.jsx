@@ -29,12 +29,14 @@ class Main extends React.Component {
     }).catch(err => console.log(err));
   }
 
-  // loadUser() {
-  //   axios.get('/api/v1/organizations')
-  //   .then(response => {
-  //
-  //   });
-  // }
+  loadUser() {
+    axios.get('/api/v1/user')
+    .then(response => {
+      this.setState({
+        user: response.data
+      });
+    });
+  }
 
   componentDidMount() {
     this.loadOrganizations();
@@ -45,6 +47,7 @@ class Main extends React.Component {
       <MuiThemeProvider>
         <div>
           <NavBar
+            user={this.state.user}
             organizations={this.state.organizations}
             defaultOrganization={this.state.defaultOrganization}
           />

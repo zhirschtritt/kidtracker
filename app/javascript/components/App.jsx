@@ -2,22 +2,27 @@ import React from 'react';
 import AutoComplete from 'material-ui/AutoComplete';
 import { IndexLink, Link, browserHistory } from 'react-router';
 import DropDownMenu from 'material-ui/DropDownMenu';
+import Paper from 'material-ui/Paper';
 import MenuItem from 'material-ui/MenuItem';
 import LocationsContainer from './LocationsContainer';
 import axios from 'axios';
 
 const styles = {
   root: {
-    display: 'grid',
-    gridColumnTemplate: '2fr 2fr 1fr 2fr'
+    display: 'float',
+    alignItems: 'center',
   },
   search: {
-    gridColumn: 2/3,
-    marginLeft: "30%"
+    padding: 10,
   },
   location: {
-    gridColumn: 3/4,
-    width: 200
+    width: 200,
+    marginBottom: 0,
+  },
+  paper: {
+    marginTop: 10,
+    textAlign: 'center',
+    display: 'inline-block',
   }
 };
 
@@ -68,29 +73,31 @@ class App extends React.Component {
 
     return (
       <div style={styles.root}>
-        <AutoComplete
-          style={styles.search}
-          hintText="Search for Kids"
-          dataSource={this.state.kids}
-          animated={true}
-          filter={AutoComplete.caseInsensitiveFilter}
-          openOnFocus={true}
-          dataSourceConfig={dataSourceConfig}
-          onNewRequest={(chosenRequest, index) => {
-            if (index != -1) { //not just a random 'enter'
-              onSelect(kid);
-              }
-            }}
-          />
-          <DropDownMenu
-          style={styles.location}
-          value={this.state.location}
-          onChange={this.handleChange}
-          autoWidth={false}
-          >
-            {locationOptions}
-          </DropDownMenu>
-          <LocationsContainer locations={this.state.locations} />
+        <Paper style={styles.paper} zDepth={1} rounded={false}>
+          <AutoComplete
+            style={styles.search}
+            hintText="Search for Kids"
+            dataSource={this.state.kids}
+            animated={true}
+            filter={AutoComplete.caseInsensitiveFilter}
+            openOnFocus={true}
+            dataSourceConfig={dataSourceConfig}
+            onNewRequest={(chosenRequest, index) => {
+              if (index != -1) { //not just a random 'enter'
+                onSelect(kid);
+                }
+              }}
+            />
+            <DropDownMenu
+            style={styles.location}
+            value={this.state.location}
+            onChange={this.handleChange}
+            autoWidth={false}
+            >
+              {locationOptions}
+            </DropDownMenu>
+          </Paper>
+            <LocationsContainer locations={this.state.locations} />
         </div>
       );
     }

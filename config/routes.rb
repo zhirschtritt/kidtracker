@@ -13,7 +13,7 @@ Rails.application.routes.draw do
       post 'locations' => 'locations#create'
       get 'kids' => 'kids#index'
       post 'events' => 'events#new'
-      get 'user' => 'users#current_user'
+      get 'user' => 'users#user'
     end
   end
 
