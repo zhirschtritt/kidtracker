@@ -21,7 +21,7 @@ end
 group :development, :test do
   gem 'byebug'
   gem 'capybara'
-  gem 'dotenv-rails'
+  gem 'dotenv-rails', require: 'dotenv/rails-now'
   gem 'factory_bot_rails'
   gem 'launchy', require: false
   gem 'pry-rails'
