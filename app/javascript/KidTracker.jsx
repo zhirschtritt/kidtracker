@@ -1,30 +1,18 @@
 import React from 'react';
-import {
-  BrowserRouter as Router,
-  Route,
-  Switch
-} from 'react-router-dom';
-import Welcome from './components/Welcome';
-import LogIn from './components/LogIn';
+import { Router, browserHistory, Route, IndexRoute } from 'react-router';
+import Main from './components/Main';
+import Login from './components/Login';
 import App from './components/App';
+import Admin from './components/Admin';
 
 const KidTracker = (props) => (
-  <Router>
-    <Switch>
-      <Route
-        exact path='/'
-        component={Welcome}
-      />
-      <Route
-        path='/login'
-        component={LogIn}
-      />
-      <Route
-        path='/app'
-        component={App}
-      />
-    </Switch>
-  </Router>
+    <Router history={browserHistory} onUpdate={() => window.scrollTo(0, 0)}>
+      <Route path='/' component={Main} >
+        <IndexRoute component={App} />
+        <Route path="/admin" component={Admin} />
+        <Route path="/login" component={Login} />
+      </Route>
+    </Router>
 );
 
 export default KidTracker;

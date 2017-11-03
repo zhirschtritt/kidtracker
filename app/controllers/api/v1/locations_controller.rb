@@ -4,11 +4,11 @@ class Api::V1::LocationsController < ApplicationController
   before_action :authenticate_user
 
   def index
-    organization_id = OrganizationsUser.where(user_id: current_user.id, default_organization: true)[0].organization_id
-    organization = Organization.find(organization_id)
+    organization = Organization.default_organization(current_user)
     locations = organization.locations
-    
-    render json: { status: :ok, locations: locations}
+
+    render json: locations
+
   end
 
   def create

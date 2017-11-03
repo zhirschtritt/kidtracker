@@ -1,124 +1,109 @@
-import PropTypes from 'prop-types';
 import React from 'react';
-import OrganizationForm from './OrganizationForm';
-import LocationContainer from './LocationContainer';
-import NavBar from './NavBar';
+import AutoComplete from 'material-ui/AutoComplete';
+import { IndexLink, Link, browserHistory } from 'react-router';
+import DropDownMenu from 'material-ui/DropDownMenu';
+import Paper from 'material-ui/Paper';
+import MenuItem from 'material-ui/MenuItem';
+import LocationsContainer from './LocationsContainer';
 import axios from 'axios';
-import { Form, Icon, Input, Button, Dropdown } from 'semantic-ui-react';
+
+const styles = {
+  searchBox: {
+    display: 'flex',
+    justifyContent: 'center',
+  },
+  search: {
+    padding: 10,
+  },
+  location: {
+    width: 200,
+    marginBottom: 0,
+  },
+  paper: {
+    marginTop: 10,
+    display: 'flex',
+    justifyContent: 'center',
+    width: "75%"
+  }
+};
+
+const dataSourceConfig = {
+  text: 'first_name',
+  value: 'id',
+};
 
 class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      organizations: [],
-      selectedOrganization: {},
+      searchText: '',
       kids: [],
+      location: '',
       locations: [],
-      user: {},
-      loadedOrgs: false,
-      loadedLocations: false,
     };
-    this.loadOrganizations = this.loadOrganizations.bind(this);
-    this.loadLocations = this.loadLocations.bind(this);
-    this.createNewOrg = this.createNewOrg.bind(this);
-    this.setSelectedOrganization = this.setSelectedOrganization.bind(this);
+    this.handleChange = this.handleChange.bind(this);
   }
 
-  createNewOrg(formPayload) {
-    axios.post('/api/v1/organizations', {
-      formPayload
-      }).then(response => {
-        this.setState({
-          organizations: response.data,
-          sendStatus: "SUCCESS" });
-      }).catch(err => console.log(error));
-  }
-
-  loadOrganizations() {
-    axios.get('/api/v1/organizations')
-    .then(response => {
-      console.log("LOADED ORGANIZATIONS: ");
-      console.log(response);
-      this.setState({
-        organizations: response.data.organizations,
-        selectedOrganization: response.data.default_organization,
-        loadedOrgs: true });
-      }).catch(err => console.log(err));
-  }
-
-  loadLocations() {
-    axios.get('/api/v1/locations')
-    .then(response => {
-      console.log("LOADED LOCATIONS: ");
-      console.log(response);
-      this.setState({ locations: response.data.locations });
-    }).catch(err => console.log(err));
-  }
-
-  setSelectedOrganization(e, data) {
-    let organization_id = data.value;
-    axios.patch('/api/v1/organizations/select', {
-      organization_id: organization_id
-    }).then(response => {
-      this.loadLocations();
-      console.log("SET SELECTED ORG: ");
-      console.log(response.data);
-      this.setState(
-        { selectedOrganization: response.data.selected_organization});
-    }).catch(err => console.log(err));
+  handleChange(event, index, value) {
+    this.setState({location: value});
   }
 
   componentDidMount() {
-    this.loadOrganizations();
-    if (!this.state.loadedLocations) {
-      this.loadLocations();
-      this.setState({ loadedLocations: true });
-    }
+    axios.get('/api/v1/locations')
+    .then(response => {
+      console.log(response.data);
+      this.setState({
+        locations: response.data,
+        location: response.data[0].id
+      });
+    });
+
+    axios.get('/api/v1/kids')
+    .then(response => {
+      console.log(response.data);
+      this.setState({
+        kids: response.data
+      });
+    });
   }
 
   render() {
-    let org_form = "";
-    if (this.state.loadedOrgs) {
-      org_form =
-      <OrganizationForm
-        organizations={this.state.organizations}
-        handleSubmit={this.createNewOrg}
-        />;
-    }
-
-    const organizations = this.state.organizations.map(org => (
-      {
-        id: org.id,
-        key: org.name,
-        value: org.id,
-        text: org.name,
-      }
+    const locationOptions = this.state.locations.map(location => (
+      <MenuItem key={location.id} value={location.id} primaryText={location.name} />
     ));
 
-    const selectedOrganization = this.state.selectedOrganization;
-    const displayOrganization =
-      {
-        id: selectedOrganization.id,
-        value: selectedOrganization.id,
-        text: selectedOrganization.name
-      };
-
-
-
     return (
-       <div>
-         <NavBar
-           organizations = {this.state.organizations}
-           selectedOrganization = {this.state.selectedOrganization}
-           users={this.state.user}
-           setSelectedOrganization={this.setSelectedOrganization}
-         />
-         {org_form}
-         <LocationContainer locations={this.state.locations} />
-       </div>
-     );
-  }
-
+      <div>
+        <div style={styles.searchBox}>
+        <Paper style={styles.paper} zDepth={1} rounded={false}>
+          <AutoComplete
+            style={styles.search}
+            hintText="Search for Kids"
+            dataSource={this.state.kids}
+            animated={true}
+            filter={AutoComplete.caseInsensitiveFilter}
+            openOnFocus={true}
+            dataSourceConfig={dataSourceConfig}
+            onNewRequest={(chosenRequest, index) => {
+              if (index != -1) { //not just a random 'enter'
+                onSelect(kid);
+                }
+              }}
+            />
+            <DropDownMenu
+            style={styles.location}
+            value={this.state.location}
+            onChange={this.handleChange}
+            autoWidth={false}
+            >
+              {locationOptions}
+            </DropDownMenu>
+          </Paper>
+        </div>
+            <LocationsContainer locations={this.state.locations} />
+        </div>
+      );
+    }
 }
 
 export default App;
