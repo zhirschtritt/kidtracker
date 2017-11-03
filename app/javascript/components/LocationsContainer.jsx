@@ -51,13 +51,6 @@ class LocationsContainer extends React.Component {
   handleClose = () => {
     this.setState({open: false});
   };
-  // componentWillReceiveProps(nextProps) {
-  //   this.setState({
-  //     organizations: nextProps.organizations,
-  //     selectedOrganization: nextProps.selectedOrganization,
-  //   });
-  // }
-
 
   render() {
 

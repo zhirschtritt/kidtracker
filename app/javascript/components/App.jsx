@@ -11,6 +11,7 @@ const styles = {
   searchBox: {
     display: 'flex',
     justifyContent: 'center',
+    alignContent: 'center'
   },
   search: {
     padding: 10,
@@ -42,10 +43,22 @@ class App extends React.Component {
       locations: [],
     };
     this.handleChange = this.handleChange.bind(this);
+    this.onSelect = this.onSelect.bind(this);
   }
 
   handleChange(event, index, value) {
     this.setState({location: value});
+  }
+
+  onSelect(kid) {
+    axios.post('/api/v1/events', {
+      event: {
+        kid_id: kid.id,
+        location_id: this.state.location.id
+      }
+    }).then(response => {
+      console.log(response.data);
+    });
   }
 
   componentDidMount() {
@@ -84,9 +97,9 @@ class App extends React.Component {
             filter={AutoComplete.caseInsensitiveFilter}
             openOnFocus={true}
             dataSourceConfig={dataSourceConfig}
-            onNewRequest={(chosenRequest, index) => {
-              if (index != -1) { //not just a random 'enter'
-                onSelect(kid);
+            onNewRequest={(kid, index) => {
+              if (index != -1) {
+                this.onSelect(kid);
                 }
               }}
             />
