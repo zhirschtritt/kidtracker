@@ -9,11 +9,17 @@
 //= require jquery
 //= require jquery_ujs
 
-import ReactOnRails from 'react-on-rails';
 import KidTracker from '../KidTracker';
+import ReactDOM from 'react-dom';
+import React from 'react';
 
-window.$ = window.jQuery = require('jquery');
+document.addEventListener('DOMContentLoaded', () => {
+  let reactElement = document.getElementById('react-app');
 
-ReactOnRails.register({
-  KidTracker,
+  if (reactElement) {
+    ReactDOM.render(
+      <KidTracker />,
+      reactElement
+    );
+  }
 });
