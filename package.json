@@ -1,5 +1,5 @@
 {
-  "name": "test-react-on-rails",
+  "name": "kidtracker",
   "private": true,
   "dependencies": {
     "@rails/webpacker": "^3.0.2",

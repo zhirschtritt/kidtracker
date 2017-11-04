@@ -16,4 +16,4 @@ production:
   <<: *default
   database: kidtracker_production
   username: kidtracker
-  password: <%= ENV['TEST-REACT-ON-RAILS_DATABASE_PASSWORD'] %>
+  password: <%= ENV['DATABASE_PASSWORD'] %>
