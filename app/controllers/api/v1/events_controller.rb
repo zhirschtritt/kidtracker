@@ -9,12 +9,12 @@ class Api::V1::EventsController < ApplicationController
   end
 
   def create
-    binding.pry
-    kid_id = event_params(:kid_id)
-    location_id = event_params(:location_id)
+    kid_id = event_params[:kid_id]
+    location_id = event_params[:location_id]
     new_event = Event.new(kid_id: kid_id, location_id: location_id)
+    locations = Location.all
     if new_event.save
-      render json: new_event
+      render json: locations
     else
       render json: new_event.errors
     end
@@ -23,8 +23,7 @@ class Api::V1::EventsController < ApplicationController
   private
 
   def event_params
-
-    params.permit(:kid_id, :location_id)
+    params.require(:event).permit(:kid_id, :location_id)
   end
 
 end
