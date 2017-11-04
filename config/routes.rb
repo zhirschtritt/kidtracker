@@ -12,7 +12,8 @@ Rails.application.routes.draw do
       get 'locations' => 'locations#index'
       post 'locations' => 'locations#create'
       get 'kids' => 'kids#index'
-      post 'events' => 'events#new'
+      post 'events' => 'events#create'
+      get 'events' => 'events#index'
       get 'user' => 'users#user'
     end
   end

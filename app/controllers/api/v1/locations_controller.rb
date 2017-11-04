@@ -7,7 +7,7 @@ class Api::V1::LocationsController < ApplicationController
     organization = Organization.default_organization(current_user)
     locations = organization.locations
 
-    render json: locations
+    render json: locations.order('name')
 
   end
 

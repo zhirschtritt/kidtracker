@@ -11,6 +11,7 @@ const styles = {
   searchBox: {
     display: 'flex',
     justifyContent: 'center',
+    alignContent: 'center'
   },
   search: {
     padding: 10,
@@ -38,14 +39,30 @@ class App extends React.Component {
     this.state = {
       searchText: '',
       kids: [],
-      location: '',
+      location_id: '',
       locations: [],
     };
     this.handleChange = this.handleChange.bind(this);
+    this.handleNewEvent = this.handleNewEvent.bind(this);
   }
 
   handleChange(event, index, value) {
-    this.setState({location: value});
+    this.setState({location_id: value});
+  }
+
+  handleNewEvent(kid_id, location_id) {
+    axios.post('/api/v1/events', {
+      event: {
+        kid_id: kid_id,
+        location_id: location_id
+      }
+    }).then(response => {
+      console.log(response.data);
+      this.setState({
+        locations: response.data,
+        searchText: ''
+      });
+    });
   }
 
   componentDidMount() {
@@ -54,7 +71,7 @@ class App extends React.Component {
       console.log(response.data);
       this.setState({
         locations: response.data,
-        location: response.data[0].id
+        location_id: response.data[0].id
       });
     });
 
@@ -81,18 +98,20 @@ class App extends React.Component {
             hintText="Search for Kids"
             dataSource={this.state.kids}
             animated={true}
+            searchText={this.state.searchText}
+            onUpdateInput={(text)=>this.setState({searchText: text})}
             filter={AutoComplete.caseInsensitiveFilter}
             openOnFocus={true}
             dataSourceConfig={dataSourceConfig}
-            onNewRequest={(chosenRequest, index) => {
-              if (index != -1) { //not just a random 'enter'
-                onSelect(kid);
+            onNewRequest={(kid, index) => {
+              if (index != -1) {
+                this.handleNewEvent(kid.id, this.state.location_id);
                 }
               }}
             />
             <DropDownMenu
             style={styles.location}
-            value={this.state.location}
+            value={this.state.location_id}
             onChange={this.handleChange}
             autoWidth={false}
             >
@@ -100,7 +119,7 @@ class App extends React.Component {
             </DropDownMenu>
           </Paper>
         </div>
-            <LocationsContainer locations={this.state.locations} />
+            <LocationsContainer handleNewEvent={this.handleNewEvent} locations={this.state.locations} />
         </div>
       );
     }
