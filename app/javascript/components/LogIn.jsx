@@ -22,7 +22,7 @@ export default class LogIn extends React.Component {
     let login = "";
     if(this.state.current_user == null) (
       login =
-      <a href="/auth/google_oauth2">
+      <a href="auth/google_oauth2">
         <Button color='google plus'>
           <Icon name='google' />
           Login with Google
