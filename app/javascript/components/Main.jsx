@@ -4,6 +4,7 @@ import NavBar from './NavBar';
 import BackButton from './BackButton';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import axios from 'axios';
+import Login from './Login';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import darkBaseTheme from 'material-ui/styles/baseThemes/darkBaseTheme';
 
@@ -17,6 +18,7 @@ class Main extends React.Component {
       user: {},
     };
     this.loadOrganizations = this.loadOrganizations.bind(this);
+    this.loadUser = this.loadUser.bind(this);
   }
 
   loadOrganizations() {
@@ -33,16 +35,23 @@ class Main extends React.Component {
     axios.get('/api/v1/user')
     .then(response => {
       this.setState({
-        user: response.data
+        user: response.data,
+        loggedIn: true,
       });
-    });
+      this.loadOrganizations();
+    }).catch(err => this.setState({ loggedIn: false }));
   }
 
   componentDidMount() {
-    this.loadOrganizations();
+    this.loadUser();
   }
 
   render() {
+    let loadApp = <Login />;
+    if (this.state.loggedIn) {
+      loadApp = this.props.children;
+    }
+
     return(
       <MuiThemeProvider>
         <div>
@@ -51,7 +60,7 @@ class Main extends React.Component {
             organizations={this.state.organizations}
             defaultOrganization={this.state.defaultOrganization}
           />
-          {this.props.children}
+          {loadApp}
         </div>
       </MuiThemeProvider>
     );
