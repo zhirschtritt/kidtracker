@@ -4,7 +4,7 @@ import NavBar from './NavBar';
 import BackButton from './BackButton';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import axios from 'axios';
-import Login from './Login';
+import LogIn from './LogIn';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import darkBaseTheme from 'material-ui/styles/baseThemes/darkBaseTheme';
 
@@ -47,7 +47,7 @@ class Main extends React.Component {
   }
 
   render() {
-    let loadApp = <Login />;
+    let loadApp = <LogIn />;
     if (this.state.loggedIn) {
       loadApp = this.props.children;
     }
