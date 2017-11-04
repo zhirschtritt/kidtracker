@@ -1,7 +1,7 @@
 import React from 'react';
 import { Router, browserHistory, Route, IndexRoute } from 'react-router';
 import Main from './components/Main';
-import Login from './components/Login';
+import LogIn from './components/LogIn';
 import App from './components/App';
 import Admin from './components/Admin';
 
@@ -10,7 +10,7 @@ const KidTracker = (props) => (
       <Route path='/' component={Main} >
         <IndexRoute component={App} />
         <Route path="/admin" component={Admin} />
-        <Route path="/login" component={Login} />
+        <Route path="/login" component={LogIn} />
       </Route>
     </Router>
 );
