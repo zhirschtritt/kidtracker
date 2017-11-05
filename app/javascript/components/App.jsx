@@ -29,34 +29,39 @@ const styles = {
   }
 };
 
-const dataSourceConfig = {
-  text: 'first_name',
-  value: 'id',
-};
 
 @inject(['kidStore'],['locationStore'],['eventStore']) @observer
 class App extends React.Component {
 
   constructor(props) {
-
     super(props);
     this.state = {
       searchText: '',
     };
   }
 
-
   componentDidMount() {
     this.props.locationStore.fetchAll()
     this.props.kidStore.fetchAll()
-
   }
 
   render() {
-    console.log(this.props.locationStore);
-    const locationOptions = this.props.locationStore.locations.map(location => (
-      <MenuItem key={location.id} value={location.id} primaryText={location.name} />
+    const { locationStore, kidStore } = this.props;
+
+    const locationData = locationStore.locations.map(location => (
+      <MenuItem key={location.id} value={location.id} primaryText={location.name}/>
     ));
+
+    const kidDisplayData = kidStore.kids.map(kid => ({
+      text: kid.full_name,
+      value: (
+        <MenuItem key={kid.id}
+          value={kid.id}
+          primaryText={kid.full_name}
+          secondaryText={kid.location.name}
+          />
+      )
+    }))
 
     return (
       <div>
@@ -65,13 +70,12 @@ class App extends React.Component {
           <AutoComplete
             style={styles.search}
             hintText="Search for Kids"
-            dataSource={this.props.kidStore.kids}
+            dataSource={kidDisplayData}
             animated={true}
             searchText={this.state.searchText}
             onUpdateInput={(text)=>this.setState({searchText: text})}
             filter={AutoComplete.caseInsensitiveFilter}
             openOnFocus={true}
-            dataSourceConfig={dataSourceConfig}
             onNewRequest={(kid, index) => {
               if (index != -1) {
                 this.props.eventStore.new(
@@ -86,11 +90,11 @@ class App extends React.Component {
             onChange={(event,key,value)=>this.props.locationStore.setDefault(value)}
             autoWidth={false}
             >
-              {locationOptions}
+              {locationData}
             </DropDownMenu>
           </Paper>
         </div>
-            <LocationsContainer handleNewEvent={this.handleNewEvent} locations={this.props.locationStore.locations} />
+            <LocationsContainer />
         </div>
       );
     }

@@ -18,7 +18,7 @@ OrganizationsUser.create!(
 )
 
 Location.create!(
-  name: "577",
+  name: "Main Space",
   organization: Organization.first
 )
 Location.create!(
@@ -26,41 +26,27 @@ Location.create!(
   organization: Organization.first
 )
 Location.create!(
-  name: "Kesher",
+  name: "Ice Skating Rink",
   organization: Organization.first
 )
-
-OrgSession.create!(
-  name: "Things that Move",
-  start_date: Date.parse('2018-07-14'),
-  end_date: Date.parse('2018-07-24'),
-  organization: Organization.first
-  )
-OrgSession.create!(
-  name: "Life: Natural and Artificial",
-  start_date: Date.parse('2018-07-25'),
-  end_date: Date.parse('2018-08-05'),
-  organization: Organization.first
-  )
-OrgSession.create!(
-  name: "Imaginary Worlds",
-  start_date: Date.parse('2018-08-06'),
-  end_date: Date.parse('2018-08-16'),
-  organization: Organization.first
-  )
 
 30.times do
   Kid.create!(
     first_name: Faker::Name.first_name,
     last_name: Faker::Name.last_name,
-    dob: Faker::Business.credit_card_expiry_date-5000
+    dob: Faker::Business.credit_card_expiry_date-5000,
+    organization_id: Organization.first.id,
+    location: Location.where(organization_id: Organization.first.id).sample
   )
 end
 
-for kid in Kid.all
-  SessionRoster.create!(
-    org_session: OrgSession.all.sample,
-    kid: kid
+10.times do
+  Kid.create!(
+    first_name: Faker::Name.first_name,
+    last_name: Faker::Name.last_name,
+    dob: Faker::Business.credit_card_expiry_date-5000,
+    organization_id: Organization.first.id,
+    location: nil
   )
 end
 
