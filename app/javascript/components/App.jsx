@@ -6,6 +6,7 @@ import Paper from 'material-ui/Paper';
 import MenuItem from 'material-ui/MenuItem';
 import LocationsContainer from './LocationsContainer';
 import axios from 'axios';
+import { observer, inject } from 'mobx-react';
 
 const styles = {
   searchBox: {
@@ -33,59 +34,27 @@ const dataSourceConfig = {
   value: 'id',
 };
 
+@inject(['kidStore'],['locationStore'],['eventStore']) @observer
 class App extends React.Component {
+
   constructor(props) {
+
     super(props);
     this.state = {
       searchText: '',
-      kids: [],
-      location_id: '',
-      locations: [],
     };
-    this.handleChange = this.handleChange.bind(this);
-    this.handleNewEvent = this.handleNewEvent.bind(this);
   }
 
-  handleChange(event, index, value) {
-    this.setState({location_id: value});
-  }
-
-  handleNewEvent(kid_id, location_id) {
-    axios.post('/api/v1/events', {
-      event: {
-        kid_id: kid_id,
-        location_id: location_id
-      }
-    }).then(response => {
-      console.log(response.data);
-      this.setState({
-        locations: response.data,
-        searchText: ''
-      });
-    });
-  }
 
   componentDidMount() {
-    axios.get('/api/v1/locations')
-    .then(response => {
-      console.log(response.data);
-      this.setState({
-        locations: response.data,
-        location_id: response.data[0].id
-      });
-    });
+    this.props.locationStore.fetchAll()
+    this.props.kidStore.fetchAll()
 
-    axios.get('/api/v1/kids')
-    .then(response => {
-      console.log(response.data);
-      this.setState({
-        kids: response.data
-      });
-    });
   }
 
   render() {
-    const locationOptions = this.state.locations.map(location => (
+    console.log(this.props.locationStore);
+    const locationOptions = this.props.locationStore.locations.map(location => (
       <MenuItem key={location.id} value={location.id} primaryText={location.name} />
     ));
 
@@ -96,7 +65,7 @@ class App extends React.Component {
           <AutoComplete
             style={styles.search}
             hintText="Search for Kids"
-            dataSource={this.state.kids}
+            dataSource={this.props.kidStore.kids}
             animated={true}
             searchText={this.state.searchText}
             onUpdateInput={(text)=>this.setState({searchText: text})}
@@ -105,21 +74,23 @@ class App extends React.Component {
             dataSourceConfig={dataSourceConfig}
             onNewRequest={(kid, index) => {
               if (index != -1) {
-                this.handleNewEvent(kid.id, this.state.location_id);
-                }
+                this.props.eventStore.new(
+                  kid.id,
+                  this.props.locationStore.defaultLocationId
+                )}
               }}
             />
             <DropDownMenu
             style={styles.location}
-            value={this.state.location_id}
-            onChange={this.handleChange}
+            value={this.props.locationStore.defaultLocationId}
+            onChange={(event,key,value)=>this.props.locationStore.setDefault(value)}
             autoWidth={false}
             >
               {locationOptions}
             </DropDownMenu>
           </Paper>
         </div>
-            <LocationsContainer handleNewEvent={this.handleNewEvent} locations={this.state.locations} />
+            <LocationsContainer handleNewEvent={this.handleNewEvent} locations={this.props.locationStore.locations} />
         </div>
       );
     }

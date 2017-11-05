@@ -1,4 +1,5 @@
 import React from 'react';
+import DevTools from 'mobx-react-devtools';
 import { Link } from 'react-router';
 import NavBar from './NavBar';
 import BackButton from './BackButton';
@@ -15,10 +16,12 @@ class Main extends React.Component {
       organizations: [],
       defaultOrganization: {},
       locations: [],
+      kids: [],
       user: {},
     };
-    this.loadOrganizations = this.loadOrganizations.bind(this);
     this.loadUser = this.loadUser.bind(this);
+    this.loadOrganizations = this.loadOrganizations.bind(this);
+
   }
 
   loadOrganizations() {
@@ -28,6 +31,7 @@ class Main extends React.Component {
         organizations: response.data.organizations,
         defaultOrganization: response.data.default_organization,
       });
+
     }).catch(err => console.log(err));
   }
 
@@ -55,6 +59,7 @@ class Main extends React.Component {
     return(
       <MuiThemeProvider>
         <div>
+          <DevTools />
           <NavBar
             user={this.state.user}
             organizations={this.state.organizations}
