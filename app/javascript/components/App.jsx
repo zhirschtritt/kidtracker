@@ -52,16 +52,18 @@ class App extends React.Component {
       <MenuItem key={location.id} value={location.id} primaryText={location.name}/>
     ));
 
-    const kidDisplayData = kidStore.kids.map(kid => ({
-      text: kid.full_name,
-      value: (
-        <MenuItem key={kid.id}
-          value={kid.id}
+    const kidDisplayData = kidStore.kids.map(kid => {
+      const locationTag = kid.current_location != null ?
+        kid.current_location.name[0] : "Not Checked In"
+      return (
+        {
+        text: kid.full_name,
+        value: <MenuItem
           primaryText={kid.full_name}
-          secondaryText={kid.location.name}
-          />
+          secondaryText={locationTag} />
+        }
       )
-    }))
+    })
 
     return (
       <div>

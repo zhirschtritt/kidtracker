@@ -8,8 +8,9 @@ import { Provider } from 'mobx-react';
 import kidStore from './stores/KidStore';
 import locationStore from './stores/LocationStore';
 import eventStore from './stores/EventStore';
+import organizationStore from './stores/OrganizationStore';
 
-const stores = { kidStore, locationStore, eventStore };
+const stores = { kidStore, locationStore, eventStore, organizationStore };
 window._____APP_STATE_____ = stores;
 
 const KidTracker = (props) => (

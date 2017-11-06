@@ -18,7 +18,7 @@ class Api::V1::OrganizationsController < ApplicationController
     organization = Organization.new(organization_params)
     if organization.save
       OrganizationsUser.create!(user: current_user, organization: organization)
-      render json: { status: :ok, message: "SUCCESS"}
+      render json: organization
     else
       render json: { status: :unprocessable_entity, message: vote.errors }
     end
@@ -39,7 +39,7 @@ class Api::V1::OrganizationsController < ApplicationController
       end
     end
 
-    render json: { status: :ok, selected_organization: default_organization}
+    render json: { status: :ok, selected_organization: Organization.default_organization(current_user)}
   end
 
   private
