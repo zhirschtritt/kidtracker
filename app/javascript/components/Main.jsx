@@ -1,5 +1,4 @@
 import React from 'react';
-import DevTools from 'mobx-react-devtools';
 import { Link } from 'react-router';
 import NavBar from './NavBar';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
@@ -48,7 +47,6 @@ class Main extends React.Component {
     return(
       <MuiThemeProvider>
         <div>
-          <DevTools />
           <NavBar
             user={this.state.user}
             organizations={organizationStore.organizations}
