@@ -8,7 +8,6 @@ class Api::V1::LocationsController < ApplicationController
     locations = organization.locations
 
     render json: locations.order('name')
-
   end
 
   def create

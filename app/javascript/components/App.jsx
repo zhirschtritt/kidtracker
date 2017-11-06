@@ -6,6 +6,7 @@ import Paper from 'material-ui/Paper';
 import MenuItem from 'material-ui/MenuItem';
 import LocationsContainer from './LocationsContainer';
 import axios from 'axios';
+import { observer, inject } from 'mobx-react';
 
 const styles = {
   searchBox: {
@@ -28,66 +29,41 @@ const styles = {
   }
 };
 
-const dataSourceConfig = {
-  text: 'first_name',
-  value: 'id',
-};
 
+@inject(['kidStore'],['locationStore'],['eventStore']) @observer
 class App extends React.Component {
+
   constructor(props) {
     super(props);
     this.state = {
       searchText: '',
-      kids: [],
-      location_id: '',
-      locations: [],
     };
-    this.handleChange = this.handleChange.bind(this);
-    this.handleNewEvent = this.handleNewEvent.bind(this);
-  }
-
-  handleChange(event, index, value) {
-    this.setState({location_id: value});
-  }
-
-  handleNewEvent(kid_id, location_id) {
-    axios.post('/api/v1/events', {
-      event: {
-        kid_id: kid_id,
-        location_id: location_id
-      }
-    }).then(response => {
-      console.log(response.data);
-      this.setState({
-        locations: response.data,
-        searchText: ''
-      });
-    });
   }
 
   componentDidMount() {
-    axios.get('/api/v1/locations')
-    .then(response => {
-      console.log(response.data);
-      this.setState({
-        locations: response.data,
-        location_id: response.data[0].id
-      });
-    });
-
-    axios.get('/api/v1/kids')
-    .then(response => {
-      console.log(response.data);
-      this.setState({
-        kids: response.data
-      });
-    });
+    this.props.locationStore.fetchAll()
+    this.props.kidStore.fetchAll()
   }
 
   render() {
-    const locationOptions = this.state.locations.map(location => (
-      <MenuItem key={location.id} value={location.id} primaryText={location.name} />
+    const { locationStore, kidStore } = this.props;
+
+    const locationData = locationStore.locations.map(location => (
+      <MenuItem key={location.id} value={location.id} primaryText={location.name}/>
     ));
+
+    const kidDisplayData = kidStore.kids.map(kid => {
+      const locationTag = kid.current_location != null ?
+        kid.current_location.name[0] : "Not Checked In"
+      return (
+        {
+        text: kid.full_name,
+        value: <MenuItem
+          primaryText={kid.full_name}
+          secondaryText={locationTag} />
+        }
+      )
+    })
 
     return (
       <div>
@@ -96,30 +72,31 @@ class App extends React.Component {
           <AutoComplete
             style={styles.search}
             hintText="Search for Kids"
-            dataSource={this.state.kids}
+            dataSource={kidDisplayData}
             animated={true}
             searchText={this.state.searchText}
             onUpdateInput={(text)=>this.setState({searchText: text})}
             filter={AutoComplete.caseInsensitiveFilter}
             openOnFocus={true}
-            dataSourceConfig={dataSourceConfig}
             onNewRequest={(kid, index) => {
               if (index != -1) {
-                this.handleNewEvent(kid.id, this.state.location_id);
-                }
+                this.props.eventStore.new(
+                  kid.id,
+                  this.props.locationStore.defaultLocationId
+                )}
               }}
             />
             <DropDownMenu
             style={styles.location}
-            value={this.state.location_id}
-            onChange={this.handleChange}
+            value={this.props.locationStore.defaultLocationId}
+            onChange={(event,key,value)=>this.props.locationStore.setDefault(value)}
             autoWidth={false}
             >
-              {locationOptions}
+              {locationData}
             </DropDownMenu>
           </Paper>
         </div>
-            <LocationsContainer handleNewEvent={this.handleNewEvent} locations={this.state.locations} />
+            <LocationsContainer />
         </div>
       );
     }

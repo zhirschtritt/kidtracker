@@ -1,57 +1,83 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import { Button, Form, Message, Dropdown } from 'semantic-ui-react';
-import axios from 'axios';
+import FormsyText from 'formsy-material-ui/lib/FormsyText';
+import Divider from 'material-ui/Divider';
+import RaisedButton from 'material-ui/RaisedButton';
+import { observer, inject } from 'mobx-react';
 
+const styles = {
+  submitStyle: {
+    marginTop: 32,
+    display: 'block'
+  }
+};
+
+@inject('organizationStore') @observer
 export default class OrganzationForm extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      name: "",
-      description: "",
-      sendStatus: null,
+      canSubmit: false
     };
-    this.handleSubmit = this.handleSubmit.bind(this);
   }
 
-  handleSubmit(event) {
-    event.preventDefault();
-    //validate handleOrgSelect
-    let formPayload = {
-      name: this.state.name,
-      description: this.state.description
+  getInitialState() {
+    return {
+      canSubmit: false,
     };
-    this.props.handleSubmit(formPayload);
-    this.form.reset();
+  }
+
+  enableButton() {
+    this.setState({
+      canSubmit: true,
+    });
+  }
+
+  disableButton() {
+    this.setState({
+      canSubmit: false,
+    });
+  }
+
+  submitForm(data) {
+    console.log(JSON.stringify(data, null, 4));
+    const name = data.name
+    this.props.organizationStore.addNew(name);
+  }
+
+  notifyFormError(data) {
+    console.error('Form error:', data);
   }
 
   render() {
 
-    let sucessMessage = "";
-    if (this.state.sendStatus == "SUCCESS") {
-      sucessMessage =
-      <Message
-        success
-        header='Boom!'
-        content="You made a new organzation!"
-      />;
-    }
-
     return (
       <div>
-        <Form success ref="form">
-          <Form.Input
-            label='Organzation Name'
-            placeholder='Acme Kids Corp.'
-            value={this.state.name}
-            onChange={e=>this.setState({name: e.target.value })}
-           />
-           {sucessMessage}
-          <Button type='submit' onClick={this.handleSubmit}>Submit</Button>
-        </Form>
-
+        <Divider />
+        <h4>Add New Organzation</h4>
+        <Formsy.Form
+          onValid={this.enableButton.bind(this)}
+          onInvalid={this.disableButton.bind(this)}
+          onValidSubmit={this.submitForm.bind(this)}
+          onInvalidSubmit={this.notifyFormError}
+          >
+            <FormsyText
+              name="name"
+              validations="minLength:5"
+              validationError="Must be at least 5 characters long"
+              required
+              hintText="Example Organization Inc."
+              floatingLabelText="Name"
+              updateImmediately
+            />
+            <RaisedButton
+              style={styles.submitStyle}
+              type="submit"
+              label="Submit"
+              disabled={!this.state.canSubmit}
+            />
+          </Formsy.Form>
       </div>
     );
   }
-
 }

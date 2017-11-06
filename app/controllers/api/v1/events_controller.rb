@@ -12,9 +12,8 @@ class Api::V1::EventsController < ApplicationController
     kid_id = event_params[:kid_id]
     location_id = event_params[:location_id]
     new_event = Event.new(kid_id: kid_id, location_id: location_id)
-    locations = Location.all
     if new_event.save
-      render json: locations
+      render json: new_event
     else
       render json: new_event.errors
     end

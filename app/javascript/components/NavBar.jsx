@@ -67,6 +67,12 @@ class NavBar extends React.Component {
               onClick={this.handleToggle}
               primaryText="About"
             />
+            <ListItem
+              containerElement={<Link to="/admin" />}
+              onClick={this.handleToggle}
+              primaryText="Admin"
+              secondaryText="Add Organizations and Kids"
+            />
           </List>
         </Drawer>
       </div>

@@ -4,7 +4,6 @@ import ActionGrade from 'material-ui/svg-icons/action/grade';
 import Divider from 'material-ui/Divider';
 import Avatar from 'material-ui/Avatar';
 import IconButton from 'material-ui/IconButton';
-import Chip from 'material-ui/Chip';
 import FontIcon from 'material-ui/FontIcon';
 import Dialog from 'material-ui/Dialog';
 import Subheader from 'material-ui/Subheader';
@@ -13,7 +12,8 @@ import Paper from 'material-ui/Paper';
 import {cyan500} from 'material-ui/styles/colors';
 import RaisedButton from 'material-ui/RaisedButton';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
-var _ = require('lodash');
+import { sortBy } from 'lodash';
+import { observer, inject } from 'mobx-react';
 
 const styles = {
   root: {
@@ -36,6 +36,7 @@ const styles = {
   },
 };
 
+@inject('eventStore','locationStore') @observer
 class LocationsContainer extends React.Component {
   constructor(props) {
     super(props);
@@ -45,21 +46,14 @@ class LocationsContainer extends React.Component {
     this.onDragEnd = this.onDragEnd.bind(this);
   }
 
-  componentWillReceiveProps(nextProps) {
-    this.setState({
-      locations: nextProps.locations
-    })
-  }
-
   onDragEnd = (result) => {
-  // dropped outside the list
+    const { eventStore } = this.props;
     if (!result.destination) {
       console.log("bad drop!")
     } else {
       const location_id = result.destination.droppableId;
-      console.log(location_id);
       const kid_id = result.draggableId;
-      this.props.handleNewEvent(kid_id, location_id);
+      eventStore.new(kid_id, location_id);
     }
   }
 
@@ -73,6 +67,7 @@ class LocationsContainer extends React.Component {
 
 
   render() {
+    const { locationStore } = this.props;
 
     const actions = [
       <FlatButton
@@ -82,8 +77,7 @@ class LocationsContainer extends React.Component {
       />
     ];
 
-
-    let locations = this.props.locations.map(location => {
+    let locations = locationStore.locations.map(location => {
       let key = `${location.name}${location.id}`
       return(
         <Paper zDepth={2} style={styles.locationColumn} key={key}>
@@ -125,7 +119,7 @@ class LocationsContainer extends React.Component {
       );
     });
 
-    locations = _.sortBy(locations, ['key'])
+    locations = sortBy(locations, ['key'])
 
 
     return(

@@ -4,7 +4,7 @@ class Api::V1::KidsController < ApplicationController
   before_action :authenticate_user
 
   def index
-    kids = Kid.all.order('first_name')
+    kids = Organization.default_organization(current_user).kids.order('first_name')
     render json: kids
   end
 
