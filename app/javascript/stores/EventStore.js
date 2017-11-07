@@ -1,5 +1,6 @@
 import { observable, action, computed } from 'mobx';
 import axios from 'axios';
+import { flatten } from 'lodash';
 
 export class EventStore {
   @observable events = []
@@ -17,7 +18,8 @@ export class EventStore {
         event.kid_name,
         event.location_name,
         event.date_formatted,
-        event.time_formatted]
+        event.time_formatted
+      ]
     )
     const options = {
       width: '100%',
@@ -37,7 +39,7 @@ export class EventStore {
     this.state = 'loading'
     axios.get('/api/v1/events')
     .then(response => {
-      this.events = response.data[0],
+      this.events = flatten(response.data),
       this.state = 'done'
     })
     .catch(error => {
@@ -48,10 +50,8 @@ export class EventStore {
   @action
   new(kid_id, location_id) {
     axios.post('/api/v1/events', {
-      event: {
         kid_id: kid_id,
         location_id: location_id
-      }
     }).then(response => {
         console.log(response.data);
     });

@@ -11,13 +11,19 @@ const mimeTypes = [
 export class KidStore {
   @observable kids = []
   @observable state = 'loading' // 'loading' / 'done' / 'error'
+  @observable searchText = ''
   @observable uploadState = {
     state: "", // 'error', 'success'
     message: "" // "error message"
   }
   @observable snackbarOpen = false;
+  
+
 
   @action closeSnackbar = () => {this.snackbarOpen = false}
+
+  @action setSearchText = (text) => {this.searchText = text}
+  @action clearSearchText = () => {this.searchText = ""}
 
   @action
   fetchAll() {
@@ -54,8 +60,6 @@ export class KidStore {
   @action
   addKids(kid_array) {
     //kid_array should be array of arrays: [['bob', 'testface', '4/20/2010' ]]
-
-
   }
 
 

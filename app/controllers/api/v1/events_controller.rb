@@ -11,7 +11,7 @@ class Api::V1::EventsController < ApplicationController
   def create
     kid_id = event_params[:kid_id]
     location_id = event_params[:location_id]
-    new_event = Event.new(kid_id: kid_id, location_id: location_id)
+    new_event = Event.new_event(kid_id, location_id)
     if new_event.save
       render json: new_event
     else

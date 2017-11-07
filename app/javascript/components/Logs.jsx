@@ -48,24 +48,28 @@ class Logs extends React.Component {
 
   render() {
     const { eventStore } = this.props;
-
-    return (
-      <div style={styles.root}>
-        <h2>Event Logs</h2>
-        <Chart
-          style={styles.chart}
-          chartType="Table"
-          options={eventStore.chartData.options}
-          chartPackages={['table']}
-          columns={eventStore.chartData.columns}
-          rows={eventStore.chartData.rows}
-          width={'100%'}
-          height='1000px'
-          chartEvents={this.chartEvents}
-
-        />
-      </div>
-    );
+    if (eventStore.state == 'loading') {
+      return(
+        <div>loading</div>
+      )
+    } else {
+      return(
+        <div style={styles.root}>
+          <h2>Event Logs</h2>
+          <Chart
+            style={styles.chart}
+            chartType="Table"
+            options={eventStore.chartData.options}
+            chartPackages={['table']}
+            columns={eventStore.chartData.columns}
+            rows={eventStore.chartData.rows}
+            width={'100%'}
+            height='1000px'
+            chartEvents={this.chartEvents}
+          />
+        </div>
+      )
+    }
   }
 }
 

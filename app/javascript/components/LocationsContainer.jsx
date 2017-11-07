@@ -47,7 +47,7 @@ class LocationsContainer extends React.Component {
   }
 
   onDragEnd = (result) => {
-    const { eventStore } = this.props;
+    const { eventStore, locationStore } = this.props;
     if (!result.destination) {
       console.log("bad drop!")
     } else {
@@ -84,6 +84,7 @@ class LocationsContainer extends React.Component {
           <List>
             <div style={styles.title}>
               <h2>{location.name}</h2>
+              <p>{location.kids.length}</p>
             </div>
              <Droppable droppableId={`${location.id}`}>
               {(provided, snapshot) => (

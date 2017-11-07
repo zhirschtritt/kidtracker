@@ -25,8 +25,9 @@ class Event < ApplicationRecord
 
 
   def self.new_event(kid_id, location_id)
-    Event.create!(kid_id: kid_id, location_id: location_id)
+    new_event = Event.new(kid_id: kid_id, location_id: location_id)
     Kid.find(kid_id).update(location_id: location_id)
+    return new_event
   end
 
   def self.organization_events(current_user)
