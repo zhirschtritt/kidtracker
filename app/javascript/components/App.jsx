@@ -60,7 +60,7 @@ class App extends React.Component {
         text: kid.full_name,
         value: <MenuItem
           primaryText={kid.full_name}
-          secondaryText={locationTag} />
+          secondaryText={kid.age} />
         }
       )
     })
