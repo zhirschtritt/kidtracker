@@ -38,7 +38,7 @@ export class KidStore {
     if (mimeTypes.includes(csv.type)) {
       Papa.parse(csv, {
         skipEmptyLines: true,
-        error: this.uploadState = 'error',
+        error: this.uploadState.state = 'error',
         complete: function(results) {
           console.log("Finished:", results.data);
         }

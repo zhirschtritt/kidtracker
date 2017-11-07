@@ -9,6 +9,7 @@ import kidStore from './stores/KidStore';
 import locationStore from './stores/LocationStore';
 import eventStore from './stores/EventStore';
 import organizationStore from './stores/OrganizationStore';
+import Logs from './components/Logs';
 
 const stores = { kidStore, locationStore, eventStore, organizationStore };
 window._____APP_STATE_____ = stores;
@@ -18,8 +19,9 @@ const KidTracker = (props) => (
     <Router history={browserHistory}>
       <Route path='/' component={Main} >
         <IndexRoute component={App} />
-        <Route path="/admin" component={Admin} />
         <Route path="/login" component={LogIn} />
+        <Route path="/admin" component={Admin} />
+        <Route path="/logs" component={Logs} />
       </Route>
     </Router>
   </Provider>
