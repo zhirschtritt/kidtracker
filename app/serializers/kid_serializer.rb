@@ -1,5 +1,5 @@
 class KidSerializer < ActiveModel::Serializer
-  attributes :id, :first_name, :last_name, :full_name, :avatar, :age, :current_location
+  attributes :id, :first_name, :last_name, :full_name, :avatar, :age, :current_location, :updated_at
 
   # def age
   #   Kid.find(self.object.id).age

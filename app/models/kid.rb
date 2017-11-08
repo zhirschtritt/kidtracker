@@ -10,7 +10,7 @@ class Kid < ApplicationRecord
 
 
   def as_json(options={})
-    options[:methods] = [:age,:current_location,:full_name]
+    options[:methods] = [:age,:current_location,:full_name, :location_updated_at]
     super
   end
 
@@ -27,4 +27,5 @@ class Kid < ApplicationRecord
   def full_name
     [first_name, last_name].join(" ")
   end
+
 end

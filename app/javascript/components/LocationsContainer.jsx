@@ -12,7 +12,7 @@ import Paper from 'material-ui/Paper';
 import {cyan500} from 'material-ui/styles/colors';
 import RaisedButton from 'material-ui/RaisedButton';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
-import { sortBy } from 'lodash';
+import { sortBy, find } from 'lodash';
 import { observer, inject } from 'mobx-react';
 
 const styles = {
@@ -36,7 +36,7 @@ const styles = {
   },
 };
 
-@inject('eventStore','locationStore') @observer
+@inject('eventStore','locationStore', 'kidStore') @observer
 class LocationsContainer extends React.Component {
   constructor(props) {
     super(props);
@@ -47,14 +47,21 @@ class LocationsContainer extends React.Component {
   }
 
   onDragEnd = (result) => {
+    const { kidStore } = this.props;
     const { eventStore, locationStore } = this.props;
     if (!result.destination) {
       console.log("bad drop!")
     } else {
-      const location_id = result.destination.droppableId;
+      const location_id = parseInt(result.destination.droppableId);
       const kid_id = result.draggableId;
+      const kid = find(kidStore.kids, ['id', kid_id]);
       eventStore.new(kid_id, location_id);
+      locationStore.update(kid, location_id);
     }
+  }
+
+  componentDidMount() {
+    setInterval(()=>{this.props.locationStore.updateKidTimes()}, (60 * 1000))
   }
 
   handleOpen = (e) => {
@@ -100,12 +107,13 @@ class LocationsContainer extends React.Component {
                             {...provided.dragHandleProps}
                           >
                             <ListItem
-                              primaryText={kid.first_name + ' ' + kid.last_name}
-                              secondaryText="time since kid arrived"
+                              primaryText={kid.full_name}
+                              secondaryText={kid.timeSinceMove}
                               key={kid.id}
                               onClick={e=>this.handleOpen(e)}
                               value={kid}
                             />
+
                           </div>
                           {provided.placeHolder}
                         </div>

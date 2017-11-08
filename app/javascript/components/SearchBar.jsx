@@ -67,9 +67,12 @@ class SearchBar extends React.Component {
         <Paper style={styles.paper} zDepth={1} rounded={false}>
           <AutoComplete
             style={styles.search}
+            listStyle={{ maxHeight: 500, overflow: 'auto' }}
             hintText="Search for Kids"
             dataSource={kidDisplayData}
             animated={true}
+            popoverProps={styles.searchDropDown}
+            // menuStyle = {{maxHeight: '500px'}}
             searchText={kidStore.searchText}
             onUpdateInput={(text)=>kidStore.setSearchText(text)}
             filter={AutoComplete.caseInsensitiveFilter}
@@ -77,7 +80,7 @@ class SearchBar extends React.Component {
             onNewRequest={(selection, index) => {
               if (index != -1) {
                 kidStore.clearSearchText();
-                locationStore.update(selection.kid, selection.kid.current_location.id);
+                locationStore.update(selection.kid);
                 eventStore.new(
                   selection.kid.id,
                   locationStore.defaultLocationId
