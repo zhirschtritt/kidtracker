@@ -8,6 +8,26 @@ class LocationStore {
   @observable locations = []
   @observable state = 'loading' // "loading" / "done" / "error"
   @observable defaultLocationId = ''
+  @observable formOpen = false
+
+  @action toggleLocationForm() {this.formOpen = !this.formOpen}
+
+  @action
+  addNew(name) {
+    this.state = 'loading'
+    axios.post('/api/v1/locations', {
+      name: name
+    })
+    .then(response => {
+      this.state = 'done'
+      const newLocation = response.data.location
+      this.fetchAll()
+    })
+    .catch(error => {
+      this.state = 'error'
+      console.log(error)
+    })
+  }
 
   @action
   updateKidTimes() {

@@ -33,14 +33,12 @@ class KidDetails extends React.Component {
     ]
 
     const events = kidStore.kidDetails.events
-    const eventsLength = events.length
-
+    console.log(events)
     const chartRows = events.map((event, index, events) => {
       let end_time = new Date()
       if (index != events.length - 1) {
         end_time = new Date(events[index+1].created_at)
       }
-
       let start_time = new Date(event.created_at)
       return(
         [event.location_name, start_time, end_time]

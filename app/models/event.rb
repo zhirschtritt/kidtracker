@@ -3,7 +3,7 @@ class Event < ApplicationRecord
   belongs_to :location
 
   def as_json(options={})
-    options[:methods] = [:kid_name,:location_name,:date_formatted, :time_formatted]
+    options[:methods] = [:kid_name, :location_name,:date_formatted, :time_formatted]
     super
   end
 

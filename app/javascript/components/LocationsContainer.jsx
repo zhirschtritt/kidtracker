@@ -97,11 +97,11 @@ class LocationsContainer extends React.Component {
     locations = sortBy(locations, ['key'])
 
     return(
-      <div style={styles.root}>
-        <DragDropContext onDragEnd={this.onDragEnd}>
-          {locations}
-        </DragDropContext>
-      </div>
+        <div style={styles.root}>
+          <DragDropContext onDragEnd={this.onDragEnd}>
+            {locations}
+          </DragDropContext>
+        </div>
     );
   }
 }

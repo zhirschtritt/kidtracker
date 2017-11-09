@@ -34,6 +34,7 @@ export class EventStore {
 
   @action
   fetchAll() {
+    console.log("fetching all logs")
     this.events = []
     this.state = 'loading'
     axios.get('/api/v1/events')

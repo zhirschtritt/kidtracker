@@ -7,6 +7,7 @@ import MenuItem from 'material-ui/MenuItem';
 import LocationsContainer from './LocationsContainer';
 import axios from 'axios';
 import { observer, inject } from 'mobx-react';
+import AddNewLocation from './AddNewLocation';
 
 const styles = {
   searchBox: {
@@ -25,6 +26,7 @@ const styles = {
       marginTop: 10,
       display: 'flex',
       justifyContent: 'center',
+      alignContent: 'center',
       width: "70%",
       flexWrap: 'wrap'
     }
@@ -95,6 +97,7 @@ class SearchBar extends React.Component {
             >
               {locationData}
             </DropDownMenu>
+            <AddNewLocation/>
           </Paper>
         </div>
       );

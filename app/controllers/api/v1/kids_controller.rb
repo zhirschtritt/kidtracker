@@ -8,7 +8,7 @@ class Api::V1::KidsController < ApplicationController
     render json: kids
   end
 
-  def new
+  def create
     kids = params[:kids][:data][1..-1]
     new_kid_count = 0
     organization_id = Organization.default_organization(current_user).id

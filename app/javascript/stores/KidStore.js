@@ -32,6 +32,7 @@ export class KidStore {
     kid: {},
     events: []
   };
+
   @action handleDetailsOpen = (e) => {
     const kidId = parseInt(e.currentTarget.id)
     this.getDailyEvents(kidId)
@@ -81,7 +82,6 @@ export class KidStore {
             kids: results
           })
           .then(response => {
-            debugger
             const kidCount = response.data.newKidCount
             console.log(`Uploaded ${kidCount} new kids`)
           })
@@ -106,6 +106,7 @@ export class KidStore {
       }
     }).then(response => {
       this.state = 'done'
+      console.log('DONE GETTING EVENTS FOR KID')
       this.kidDetails.events = response.data
     })
   }
