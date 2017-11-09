@@ -64,20 +64,34 @@ export class KidStore {
   }
 
   @action
+  addKids(kid_array) {
+    //kid_array should be array of arrays: [['bob', 'testface', '4/20/2010' ]]
+    debugger;
+  }
+
+  @action
   parseCsv(csv) {
     if (mimeTypes.includes(csv.type)) {
       Papa.parse(csv, {
         skipEmptyLines: true,
         error: this.uploadState.state = 'error',
+
         complete: function(results) {
-          console.log("Finished:", results.data);
+          axios.post('/api/v1/kids/new', {
+            kids: results
+          })
+          .then(response => {
+            debugger
+            const kidCount = response.data.newKidCount
+            console.log(`Uploaded ${kidCount} new kids`)
+          })
         }
-      });
+      })
+
     } else {
       this.uploadState.state = 'error'
       this.uploadState.message = 'File must be a .csv, .xls, .xlsx, or .ods'
       this.snackbarOpen = true
-      console.log(this.snackbarOpen);
     }
   }
 
@@ -96,10 +110,7 @@ export class KidStore {
     })
   }
 
-  @action
-  addKids(kid_array) {
-    //kid_array should be array of arrays: [['bob', 'testface', '4/20/2010' ]]
-  }
+
 
 
 }

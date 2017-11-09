@@ -8,8 +8,24 @@ class Api::V1::KidsController < ApplicationController
     render json: kids
   end
 
-  def create
-
+  def new
+    kids = params[:kids][:data][1..-1]
+    new_kid_count = 0
+    organization_id = Organization.default_organization(current_user).id
+    kids.each do |kid|
+      next if kid[0] == ""
+      dob = Date.strptime(kid[2],'%m/%d/%Y')
+      new_kid = Kid.new(
+        first_name: kid[0],
+        last_name: kid[1],
+        dob: dob,
+        organization_id: organization_id
+      )
+      if new_kid.save
+        new_kid_count += 1
+      end
+    end
+    render json: {status: :ok, newKidCount: new_kid_count}
   end
 
   private

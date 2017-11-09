@@ -16,6 +16,8 @@ const styles = {
     padding: '10px',
   },
   dropZone: {
+    padding: 20,
+    border: '1px solid',
     flexGrow: 1,
     minHeight: '100px',
   }
@@ -34,18 +36,22 @@ class AdminKidPanel extends React.Component {
   render() {
     const { kidStore } = this.props;
 
+
+
     return(
       <div style={styles.root}>
         <Paper style={styles.paper}zDepth={3}>
           <h3>Kids</h3>
           <DropZone
-            onDrop={this.onDrop.bind(this)}
+            style={styles.dropZone} className="dropzone"
+            onDrop={this.onDrop.bind(this)
+            }
             >
               {/* <Paper style={styles.dropZone}> */}
                 <p>Drop A CSV of students here</p>
               {/* </Paper> */}
           </DropZone>
-          <FloatingActionButton secondary={true} >
+          <FloatingActionButton secondary={true} style={{marginTop: 30}} >
             <ContentAdd />
           </FloatingActionButton>
         </Paper>

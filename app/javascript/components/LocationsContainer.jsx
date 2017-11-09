@@ -1,17 +1,10 @@
 import React from 'react';
 import {List, ListItem} from 'material-ui/List';
 import KidListContainer from './KidListContainer';
-import ActionGrade from 'material-ui/svg-icons/action/grade';
-import Divider from 'material-ui/Divider';
-import Avatar from 'material-ui/Avatar';
-import IconButton from 'material-ui/IconButton';
-import FontIcon from 'material-ui/FontIcon';
+import Badge from 'material-ui/Badge';
 import Dialog from 'material-ui/Dialog';
-import Subheader from 'material-ui/Subheader';
-import FlatButton from 'material-ui/FlatButton';
 import Paper from 'material-ui/Paper';
 import {cyan500} from 'material-ui/styles/colors';
-import RaisedButton from 'material-ui/RaisedButton';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import { sortBy, find } from 'lodash';
 import { observer, inject } from 'mobx-react';
@@ -33,7 +26,7 @@ const styles = {
   title: {
     color: 'rgb(0, 188, 212)',
     display: 'flex',
-    justifyContent: 'center',
+    justifyContent: 'center'
   },
 };
 
@@ -78,7 +71,11 @@ class LocationsContainer extends React.Component {
           <List>
             <div style={styles.title}>
               <h2>{location.name}</h2>
-              <p>{location.kids.length}</p>
+              <Badge
+                badgeContent={location.kids.length}
+                secondary={true}
+                badgeStyle={{top: 20, left: 16}}
+              />
             </div>
              <Droppable droppableId={`${location.id}`}>
               {(provided, snapshot) => (
