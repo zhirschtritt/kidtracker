@@ -1,6 +1,8 @@
-import { observable, action, computed } from 'mobx';
-import Papa from 'papaparse';
-import axios from 'axios';
+import { observable, action, computed } from 'mobx'
+import { find } from 'lodash'
+import Papa from 'papaparse'
+import moment from 'moment'
+import axios from 'axios'
 
 const mimeTypes = [
   'text/csv',
@@ -11,17 +13,39 @@ const mimeTypes = [
 export class KidStore {
   @observable kids = []
   @observable state = 'loading' // 'loading' / 'done' / 'error'
-  @observable searchText = ''
   @observable uploadState = {
     state: "", // 'error', 'success'
     message: "" // "error message"
   }
+
+  @action getAlpha(kid) {
+    console.log("calcluating")
+    const updated_at = new Date(kid.updated_at)
+    const now = new Date()
+    const calculatedOpacity = (((now - updated_at) / 1000) * (-0.45)) + 100
+    const alpha = calculatedOpacity > 0 ? calculatedOpacity/100 : 0
+    return alpha
+  }
+
+  @observable detailsOpen = false;
+  @observable kidDetails = {
+    kid: {},
+    events: []
+  };
+  @action handleDetailsOpen = (e) => {
+    const kidId = parseInt(e.currentTarget.id)
+    this.getDailyEvents(kidId)
+    const kid = find(this.kids, ['id', kidId])
+    this.kidDetails.kid = kid
+    this.detailsOpen = true
+  }
+  @action handleDetailsClose = () => {this.detailsOpen = false}
+
+
   @observable snackbarOpen = false;
-  
-
-
   @action closeSnackbar = () => {this.snackbarOpen = false}
 
+  @observable searchText = ''
   @action setSearchText = (text) => {this.searchText = text}
   @action clearSearchText = () => {this.searchText = ""}
 
@@ -55,6 +79,21 @@ export class KidStore {
       this.snackbarOpen = true
       console.log(this.snackbarOpen);
     }
+  }
+
+  @action
+  getDailyEvents(kidId) {
+    this.state = 'loading'
+    axios.get('/api/v1/events_between', {
+      params: {
+          kid_id: kidId,
+          begin_date: moment().startOf('day'),
+          end_date: moment().endOf('day')
+      }
+    }).then(response => {
+      this.state = 'done'
+      this.kidDetails.events = response.data
+    })
   }
 
   @action

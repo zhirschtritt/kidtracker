@@ -32,7 +32,6 @@ export class EventStore {
     })
   }
 
-
   @action
   fetchAll() {
     this.events = []

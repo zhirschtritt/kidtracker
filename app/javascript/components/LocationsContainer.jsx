@@ -1,5 +1,6 @@
 import React from 'react';
 import {List, ListItem} from 'material-ui/List';
+import KidListContainer from './KidListContainer';
 import ActionGrade from 'material-ui/svg-icons/action/grade';
 import Divider from 'material-ui/Divider';
 import Avatar from 'material-ui/Avatar';
@@ -61,28 +62,14 @@ class LocationsContainer extends React.Component {
   }
 
   componentDidMount() {
-    setInterval(()=>{this.props.locationStore.updateKidTimes()}, (60 * 1000))
+    const { locationStore, kidStore } = this.props;
+    setInterval(()=>{
+      locationStore.updateKidTimes()}, (30 * 1000)
+    )
   }
-
-  handleOpen = (e) => {
-    this.setState({open: true});
-  };
-
-  handleClose = () => {
-    this.setState({open: false});
-  };
-
 
   render() {
     const { locationStore } = this.props;
-
-    const actions = [
-      <FlatButton
-        label="Cancel"
-        primary={true}
-        onClick={this.handleClose}
-      />
-    ];
 
     let locations = locationStore.locations.map(location => {
       let key = `${location.name}${location.id}`
@@ -96,31 +83,13 @@ class LocationsContainer extends React.Component {
              <Droppable droppableId={`${location.id}`}>
               {(provided, snapshot) => (
                 <div ref={provided.innerRef}
-                     style={{ backgroundColor: snapshot.isDraggingOver ? cyan500 :'' }}
-                  >
-                {location.kids.map(kid => (
-                    <Draggable key={kid.id} draggableId={kid.id}>
-                      {(provided, snapshot) => (
-                        <div>
-                          <div ref={provided.innerRef}
-                            style={provided.draggableStyle}
-                            {...provided.dragHandleProps}
-                          >
-                            <ListItem
-                              primaryText={kid.full_name}
-                              secondaryText={kid.timeSinceMove}
-                              key={kid.id}
-                              onClick={e=>this.handleOpen(e)}
-                              value={kid}
-                            />
-
-                          </div>
-                          {provided.placeHolder}
-                        </div>
-                      )}
-                    </Draggable>
-                ))}
-              </div>
+                     style={{backgroundColor: snapshot.isDraggingOver ?
+                       cyan500 :''}}
+                >
+                <KidListContainer
+                  kids={location.kids}
+                  handleOpen={this.handleOpen}/>
+                </div>
               )}
             </Droppable>
           </List>
@@ -130,23 +99,11 @@ class LocationsContainer extends React.Component {
 
     locations = sortBy(locations, ['key'])
 
-
     return(
-      <div>
-        <div style={styles.root}>
-          <DragDropContext onDragEnd={this.onDragEnd}>
-            {locations}
-          </DragDropContext>
-        </div>
-        <Dialog
-          title="Kid Info"
-          actions={actions}
-          modal={false}
-          open={this.state.open}
-          onRequestClose={this.handleClose}
-          >
-            <h3>WOW! So much info about this kid! Just look at it all!</h3>
-        </Dialog>
+      <div style={styles.root}>
+        <DragDropContext onDragEnd={this.onDragEnd}>
+          {locations}
+        </DragDropContext>
       </div>
     );
   }

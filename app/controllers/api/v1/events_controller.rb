@@ -19,10 +19,17 @@ class Api::V1::EventsController < ApplicationController
     end
   end
 
+  def events_between
+    kid_id = params[:kid_id]
+    begin_date = Date.parse(params[:begin_date])
+    end_date = Date.parse(params[:end_date])
+    render json: Event.kid_events_between(kid_id, begin_date, end_date)
+  end
+
   private
 
   def event_params
-    params.require(:event).permit(:kid_id, :location_id)
+    params.require(:event).permit(:kid_id, :location_id, :begin_date, :end_date)
   end
 
 end

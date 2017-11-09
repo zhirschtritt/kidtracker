@@ -9,17 +9,15 @@ class LocationStore {
   @observable state = 'loading' // "loading" / "done" / "error"
   @observable defaultLocationId = ''
 
-
-
   @action
   updateKidTimes() {
     console.log("updating times");
     this.locations.map(location => {
       location.kids.forEach(kid => {
         const now = moment()
-        const then = moment.parseZone(kid.updated_at)
-        const diff = moment.duration(now.diff(then)).humanize()
-        kid.timeSinceMove = `${diff} ago`
+        const then = moment(kid.updated_at)
+        kid.diff = moment.duration(now.diff(then))
+        kid.timeSinceMove = `${kid.diff.humanize()} ago`
       })
     })
   }
@@ -50,29 +48,32 @@ class LocationStore {
   update(kid, toLocationId = this.defaultLocationId) {
     kid.updated_at = moment()
 
-    let newLocations = Immutable.List(this.locations);
     const fromLocationId = kid.current_location != null ? kid.current_location.id : null
 
     if (fromLocationId != null) { //if there is a from location, remove the kid from that list
       let fromLoc = find(this.locations, ['id', fromLocationId])
       const fromLocIndex = findIndex(this.locations, fromLoc)
-      const kidIndex = findIndex(fromLoc.kids,['id', kid.id])
-      fromLoc.kids.splice(kidIndex, 1)
-      newLocations.set(fromLocIndex, fromLoc)
+      const newFromKidList = fromLoc.kids.filter(kid_object => (
+        kid_object.id !== kid.id)
+      )
+      fromLoc = Object.assign({}, fromLoc, { kids: newFromKidList})
+      this.locations.splice(fromLocIndex, 1, fromLoc)
     }
 
-    const toLoc = find(this.locations, ['id', toLocationId])
+    let toLoc = find(this.locations, ['id', toLocationId])
     const toLocIndex = findIndex(this.locations, toLoc)
-    toLoc.kids.splice(0,1,kid); //add kid to new location list
+    const newToKidList = toLoc.kids.concat(kid)
+    toLoc = Object.assign({}, toLoc, { kids: newToKidList})
 
-    newLocations.set(toLocIndex, toLoc)
+    this.locations.splice(toLocIndex, 1, toLoc)
     this.updateKidTimes()
+    this.sortKidsByUpdated()
   }
 
   @action
   sortKidsByUpdated() {
     this.locations.forEach(location => {
-      location.kids = reverse(sortBy(location.kids,['updated_at']))
+      location.kids = sortBy(location.kids,['diff'])
     })
   }
 

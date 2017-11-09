@@ -1,6 +1,7 @@
 import React from 'react';
 import LocationsContainer from './LocationsContainer';
 import SearchBar from './SearchBar';
+import KidDetails from './KidDetails';
 
 const App = () => {
 
@@ -8,6 +9,7 @@ const App = () => {
     <div>
       <SearchBar />
       <LocationsContainer />
+      <KidDetails />
     </div>
   );
 };

@@ -38,4 +38,12 @@ class Event < ApplicationRecord
     end
   end
 
+  def self.kid_events_between(kid_id, start_date, end_date)
+    Event.where("kid_id = ? AND created_at > ? AND created_at < ?", kid_id, start_date, end_date)
+  end
+
+  def self.events_between()
+
+  end
+
 end
