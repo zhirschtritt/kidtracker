@@ -40,7 +40,6 @@ export default class OrganzationForm extends React.Component {
   }
 
   submitForm(data) {
-    console.log(JSON.stringify(data, null, 4));
     const name = data.name
     this.props.organizationStore.addNew(name);
   }

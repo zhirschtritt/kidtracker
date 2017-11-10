@@ -30,7 +30,6 @@ class LocationStore {
 
   @action
   updateKidTimes() {
-    console.log("updating times");
     this.locations.map(location => {
       location.kids.forEach(kid => {
         const now = moment()
@@ -65,7 +64,6 @@ class LocationStore {
 
   @action
   removeFromLocation(kid, fromLocationId) {
-    console.log("removing kid")
     let fromLoc = find(this.locations, ['id', fromLocationId])
     const fromLocIndex = findIndex(this.locations, fromLoc)
     const newFromKidList = fromLoc.kids.filter(kid_object => (

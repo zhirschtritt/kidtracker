@@ -34,7 +34,6 @@ export class EventStore {
 
   @action
   fetchAll() {
-    console.log("fetching all logs")
     this.events = []
     this.state = 'loading'
     axios.get('/api/v1/events')
@@ -49,11 +48,12 @@ export class EventStore {
 
   @action
   new(kid_id, location_id) {
+    this.state = 'loading'
     axios.post('/api/v1/events', {
         kid_id: kid_id,
         location_id: location_id
     }).then(response => {
-        console.log(response.data);
+      this.state = 'done'
     });
   }
 

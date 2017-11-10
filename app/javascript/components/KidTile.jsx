@@ -23,7 +23,6 @@ class KidTile extends React.Component {
       case "DELETE":
         break
       case "SIGNOUT":
-        console.log("Signing Out")
         eventStore.new(kid.id, null)
         locationStore.removeFromLocation(kid, kid.current_location.id)
         break

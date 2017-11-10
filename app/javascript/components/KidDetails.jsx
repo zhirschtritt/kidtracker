@@ -20,7 +20,7 @@ class KidDetails extends React.Component {
   ];
 
   chartActions() {
-    console.log("yaaay")
+
   }
 
   render(){
@@ -33,7 +33,7 @@ class KidDetails extends React.Component {
     ]
 
     const events = kidStore.kidDetails.events
-    console.log(events)
+
     const chartRows = events.map((event, index, events) => {
       let end_time = new Date()
       if (index != events.length - 1) {

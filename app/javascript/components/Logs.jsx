@@ -40,7 +40,6 @@ class Logs extends React.Component {
       {
         eventName: 'select',
         callback(Chart) {
-          console.log('Selected ', Chart.chart.getSelection());
         },
       },
     ];
