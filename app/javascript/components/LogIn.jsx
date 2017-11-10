@@ -19,11 +19,11 @@ const LogIn = () => {
 
   return (
     <div style={styles.root}>
-      <a href="auth/google_oauth2">
-        <RaisedButton syle={styles.button} primary={true}>
-          Login with Google
-        </RaisedButton>
-      </a>
+        <RaisedButton
+          label="Log In with Google"
+           onClick={()=>window.location='auth/google_oauth2'} syle={styles.button}
+           primary={true}
+         />
     </div>
   );
 };

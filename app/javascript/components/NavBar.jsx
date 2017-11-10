@@ -38,7 +38,7 @@ class NavBar extends React.Component {
 
     if (this.props.user != {}) {
       loginOut =
-      <FlatButton  label="Logout" />;
+      <FlatButton  label="Logout" onClick={()=>window.location='/logout'}/>;
     }
 
 
