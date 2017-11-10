@@ -1,7 +1,6 @@
 import { observable, action } from 'mobx';
 import { find, findIndex, differenceBy, sortBy, concat, reverse } from 'lodash';
 import moment from 'moment';
-import Immutable from 'immutable';
 import axios from 'axios';
 
 class LocationStore {
