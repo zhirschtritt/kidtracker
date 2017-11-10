@@ -65,6 +65,7 @@ export class KidStore {
 
   @action
   parseCsv(csv) {
+    this.state = 'loading'
     if (mimeTypes.includes(csv.type)) {
       Papa.parse(csv, {
         skipEmptyLines: true,
@@ -76,11 +77,12 @@ export class KidStore {
           })
           .then(response => {
             const kidCount = response.data.newKidCount
+            this.uploadState.state = 'success'
+            this.fetchAll()
             console.log(`Uploaded ${kidCount} new kids`)
           })
         }
       })
-
     } else {
       this.uploadState.state = 'error'
       this.uploadState.message = 'File must be a .csv, .xls, .xlsx, or .ods'
@@ -102,12 +104,6 @@ export class KidStore {
       this.kidDetails.events = response.data
     })
   }
-
-
-
-
-
-
 }
 
 export default new KidStore();

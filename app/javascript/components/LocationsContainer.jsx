@@ -4,6 +4,10 @@ import KidListContainer from './KidListContainer';
 import Badge from 'material-ui/Badge';
 import Dialog from 'material-ui/Dialog';
 import Paper from 'material-ui/Paper';
+import IconMenu from 'material-ui/IconMenu';
+import MenuItem from 'material-ui/MenuItem';
+import IconButton from 'material-ui/IconButton';
+import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
 import {cyan500} from 'material-ui/styles/colors';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import { sortBy, find } from 'lodash';
@@ -25,6 +29,8 @@ const styles = {
   },
   title: {
     color: 'rgb(0, 188, 212)',
+    paddingRight: 10,
+    paddingLeft: 10,
     display: 'flex',
     justifyContent: 'center'
   },
