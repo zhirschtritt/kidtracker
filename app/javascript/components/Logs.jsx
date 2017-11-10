@@ -40,7 +40,6 @@ class Logs extends React.Component {
       {
         eventName: 'select',
         callback(Chart) {
-            // Returns Chart so you can access props and  the ChartWrapper object from chart.wrapper
           console.log('Selected ', Chart.chart.getSelection());
         },
       },
@@ -56,6 +55,15 @@ class Logs extends React.Component {
       return(
         <div style={styles.root}>
           <h2>Event Logs</h2>
+          {/* <Chart
+            style={styles.chart}
+            data={eventStore.lineChartData}
+            chartType="Line"
+            options={{curveType: 'function'}}
+            width={'100%'}
+            height='500px'
+            chartEvents={this.chartEvents}
+          /> */}
           <Chart
             style={styles.chart}
             chartType="Table"

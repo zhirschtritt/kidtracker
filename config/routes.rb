@@ -15,6 +15,7 @@ Rails.application.routes.draw do
 
       get  'kids' => 'kids#index'
       post  'kids/new' => 'kids#create'
+      post  'kids/:id' => 'kids#update'
 
       post 'events' => 'events#create'
       get  'events' => 'events#index'

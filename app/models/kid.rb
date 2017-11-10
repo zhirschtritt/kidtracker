@@ -1,7 +1,7 @@
 require 'date'
 
 class Kid < ApplicationRecord
-  has_many :events
+  has_many :events, dependent: :destroy
   belongs_to :location, optional: true
 
   validates :first_name, presence: true

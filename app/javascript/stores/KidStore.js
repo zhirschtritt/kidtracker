@@ -19,10 +19,9 @@ export class KidStore {
   }
 
   @action getAlpha(kid) {
-    console.log("calcluating")
     const updated_at = new Date(kid.updated_at)
     const now = new Date()
-    const calculatedOpacity = (((now - updated_at) / 1000) * (-0.45)) + 100
+    const calculatedOpacity = (((now - updated_at) / 1000) * (-1/3)) + 100
     const alpha = calculatedOpacity > 0 ? calculatedOpacity/100 : 0
     return alpha
   }
@@ -65,12 +64,6 @@ export class KidStore {
   }
 
   @action
-  addKids(kid_array) {
-    //kid_array should be array of arrays: [['bob', 'testface', '4/20/2010' ]]
-    debugger;
-  }
-
-  @action
   parseCsv(csv) {
     if (mimeTypes.includes(csv.type)) {
       Papa.parse(csv, {
@@ -106,10 +99,11 @@ export class KidStore {
       }
     }).then(response => {
       this.state = 'done'
-      console.log('DONE GETTING EVENTS FOR KID')
       this.kidDetails.events = response.data
     })
   }
+
+
 
 
 

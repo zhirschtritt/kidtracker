@@ -65,27 +65,35 @@ class LocationStore {
   }
 
   @action
-  update(kid, toLocationId = this.defaultLocationId) {
-    kid.updated_at = moment()
+  removeFromLocation(kid, fromLocationId) {
+    console.log("removing kid")
+    let fromLoc = find(this.locations, ['id', fromLocationId])
+    const fromLocIndex = findIndex(this.locations, fromLoc)
+    const newFromKidList = fromLoc.kids.filter(kid_object => (
+      kid_object.id !== kid.id)
+    )
+    fromLoc = Object.assign({}, fromLoc, { kids: newFromKidList})
+    this.locations.splice(fromLocIndex,1, fromLoc)
+  }
 
-    const fromLocationId = kid.current_location != null ? kid.current_location.id : null
-
-    if (fromLocationId != null) { //if there is a from location, remove the kid from that list
-      let fromLoc = find(this.locations, ['id', fromLocationId])
-      const fromLocIndex = findIndex(this.locations, fromLoc)
-      const newFromKidList = fromLoc.kids.filter(kid_object => (
-        kid_object.id !== kid.id)
-      )
-      fromLoc = Object.assign({}, fromLoc, { kids: newFromKidList})
-      this.locations.splice(fromLocIndex, 1, fromLoc)
-    }
-
+  @action
+  moveToLocation(kid, toLocationId) {
     let toLoc = find(this.locations, ['id', toLocationId])
+    kid.current_location = toLoc
     const toLocIndex = findIndex(this.locations, toLoc)
     const newToKidList = toLoc.kids.concat(kid)
     toLoc = Object.assign({}, toLoc, { kids: newToKidList})
-
     this.locations.splice(toLocIndex, 1, toLoc)
+  }
+
+  @action
+  update(kid, toLocationId = this.defaultLocationId) {
+    kid.updated_at = moment()
+    const fromLocationId = kid.current_location != null ? kid.current_location.id : null
+    if (fromLocationId != null) { //if there is a from location, remove the kid from that list
+      this.removeFromLocation(kid, fromLocationId)
+    }
+    this.moveToLocation(kid, toLocationId)
     this.updateKidTimes()
     this.sortKidsByUpdated()
   }

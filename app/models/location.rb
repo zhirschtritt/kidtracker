@@ -1,7 +1,6 @@
 class Location < ApplicationRecord
   belongs_to :organization
-  has_many :events
-  has_many :kids, through: :events
+  has_many :events, dependent: :destroy
 
   validates :name, presence: true
 
