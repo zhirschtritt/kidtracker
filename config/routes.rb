@@ -6,15 +6,21 @@ Rails.application.routes.draw do
 
   namespace :api do
     namespace :v1 do
-      get 'organizations' => 'organizations#index'
-      post 'organizations' => 'organizations#create'
+      get   'organizations' => 'organizations#index'
+      post  'organizations' => 'organizations#create'
       patch 'organizations/select' => 'organizations#select'
-      get 'locations' => 'locations#index'
+
+      get  'locations' => 'locations#index'
       post 'locations' => 'locations#create'
-      get 'kids' => 'kids#index'
+
+      get  'kids' => 'kids#index'
+      post  'kids/new' => 'kids#create'
+
       post 'events' => 'events#create'
-      get 'events' => 'events#index'
-      get 'user' => 'users#user'
+      get  'events' => 'events#index'
+      get  'events_between' => 'events#events_between'
+
+      get  'user' => 'users#user'
     end
   end
 

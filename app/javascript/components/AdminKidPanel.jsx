@@ -1,23 +1,27 @@
 import React from 'react';
 import Paper from 'material-ui/Paper';
+import Snackbar from 'material-ui/Snackbar';
 import FloatingActionButton from 'material-ui/FloatingActionButton';
 import ContentAdd from 'material-ui/svg-icons/content/add';
 import { observer, inject } from 'mobx-react';
 import DropZone from 'react-dropzone';
 
 const styles = {
-  paper: {
+  root: {
     flexGrow: 1,
     maxWidth: '50%',
     margin: 10,
+  },
+  paper: {
     padding: '10px',
   },
   dropZone: {
+    padding: 20,
+    border: '1px solid',
     flexGrow: 1,
     minHeight: '100px',
   }
 };
-
 
 @inject('kidStore') @observer
 class AdminKidPanel extends React.Component {
@@ -25,25 +29,39 @@ class AdminKidPanel extends React.Component {
     super(props)
   }
 
-  onDrop(acceptedFiles, rejectedFiles) {
-    debugger;
+  onDrop(files) {
+    this.props.kidStore.parseCsv(files[0])
   }
 
   render() {
+    const { kidStore } = this.props;
+
+
+
     return(
-      <Paper style={styles.paper}zDepth={3}>
-        <h3>Kids</h3>89
-        <DropZone
-          onDrop={this.onDrop.bind(this)}
-          >
-            {/* <Paper style={styles.dropZone}> */}
-              <p>Drop A CSV of students here</p>
-            {/* </Paper> */}
-        </DropZone>
-        <FloatingActionButton secondary={true} >
-          <ContentAdd />
-        </FloatingActionButton>
-      </Paper>
+      <div style={styles.root}>
+        <Paper style={styles.paper}zDepth={3}>
+          <h3>Kids</h3>
+          <DropZone
+            style={styles.dropZone} className="dropzone"
+            onDrop={this.onDrop.bind(this)
+            }
+            >
+              {/* <Paper style={styles.dropZone}> */}
+                <p>Drop A CSV of students here</p>
+              {/* </Paper> */}
+          </DropZone>
+          <FloatingActionButton secondary={true} style={{marginTop: 30}} >
+            <ContentAdd />
+          </FloatingActionButton>
+        </Paper>
+        <Snackbar
+          open={kidStore.snackbarOpen}
+          message={kidStore.uploadState.message}
+          autoHideDuration={10000}
+          onRequestClose={kidStore.closeSnackbar}
+          />
+        </div>
     )
   }
 
