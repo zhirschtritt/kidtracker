@@ -57,7 +57,6 @@ class KidDetails extends React.Component {
       chartEvents={this.chartEvents}
       chartPackages={['timeline']}/>
 
-
     return(
       <Dialog
         title={kidStore.kidDetails.kid.full_name}

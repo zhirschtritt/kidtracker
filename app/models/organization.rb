@@ -17,7 +17,8 @@ class Organization < ApplicationRecord
 
     return OrganizationsUser.where(
       user_id: current_user.id,
-      default_organization: true)[0].organization
+      default_organization: true
+      )[0].organization
   end
 
 end

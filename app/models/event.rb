@@ -1,9 +1,9 @@
 class Event < ApplicationRecord
   belongs_to :kid
-  belongs_to :location
+  belongs_to :location, optional: true
 
   def as_json(options={})
-    options[:methods] = [:kid_name, :location_name,:date_formatted, :time_formatted]
+    options[:methods] = [:kid_name, :location_name, :date_formatted, :time_formatted]
     super
   end
 
@@ -12,6 +12,7 @@ class Event < ApplicationRecord
   end
 
   def location_name
+    return nil if location_id.nil?
     Location.find(location_id).name
   end
 
