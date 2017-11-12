@@ -7,8 +7,9 @@ import Paper from 'material-ui/Paper';
 import IconMenu from 'material-ui/IconMenu';
 import MenuItem from 'material-ui/MenuItem';
 import IconButton from 'material-ui/IconButton';
+import CloseIcon from 'material-ui/svg-icons/navigation/close';
 import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
-import {cyan500} from 'material-ui/styles/colors';
+import { cyan500, indigo500 } from 'material-ui/styles/colors';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import { sortBy, find } from 'lodash';
 import { observer, inject } from 'mobx-react';
@@ -24,16 +25,20 @@ const styles = {
     flexGrow: 1,
     margin: 10
   },
-  chip: {
-    margin: 4,
-  },
   title: {
-    color: 'rgb(0, 188, 212)',
-    paddingRight: 10,
+    color: cyan500,
+    marginTop: 0,
+    paddingTop: 0,
     paddingLeft: 10,
+    paddingRight: 10,
     display: 'flex',
     justifyContent: 'center'
   },
+  closeButton: {
+    top: 0,
+    right: 20,
+    // position: 'absolute'
+  }
 };
 
 @inject('eventStore','locationStore', 'kidStore') @observer
@@ -76,6 +81,15 @@ class LocationsContainer extends React.Component {
         <Paper zDepth={2} style={styles.locationColumn} key={key}>
           <List>
             <div style={styles.title}>
+            <IconButton
+              style={styles.closeButton}
+              tooltip="Remove Location"
+              id={location}
+              tooltipPosition="top-left"
+              onClick={(e)=>console.log(e)}
+              >
+              <CloseIcon color={cyan500}/>
+            </IconButton>
               <h2>{location.name}</h2>
               <Badge
                 badgeContent={location.kids.length}
