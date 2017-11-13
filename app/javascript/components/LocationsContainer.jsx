@@ -117,7 +117,7 @@ class LocationsContainer extends React.Component {
               {(provided, snapshot) => (
                 <div ref={provided.innerRef}
                      style={{backgroundColor: snapshot.isDraggingOver ?
-                       cyan500 :''}}
+                       cyan500 :'', minHeight: 100}}
                 >
                 <KidListContainer
                   kids={location.kids}
