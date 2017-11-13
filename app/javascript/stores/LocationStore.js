@@ -80,20 +80,6 @@ class LocationStore {
     return location.kids.length === 0
   }
 
-  @observable dialog = {
-    message:'',
-    type: 'NONE', // WARNING, ERROR, SUCCESS
-    open: false
-  }
-
-  @action
-  setDialog(props) {
-    this.dialog.message = props.message || ''
-    this.dialog.type = props.type || 'NONE'
-    this.dialog.open = props.open || false
-  }
-
-
 
   @action
   removeFromLocation(kid, fromLocationId) {

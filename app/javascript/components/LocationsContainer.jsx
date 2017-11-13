@@ -41,7 +41,7 @@ const styles = {
   }
 };
 
-@inject('eventStore','locationStore', 'kidStore') @observer
+@inject('eventStore','locationStore', 'kidStore', 'uiStore') @observer
 class LocationsContainer extends React.Component {
   constructor(props) {
     super(props);
@@ -73,22 +73,21 @@ class LocationsContainer extends React.Component {
   }
 
   handleRemoveLoc(e) {
-    const { locationStore } = this.props;
+    const { locationStore, uiStore } = this.props;
     const locationId = parseInt(e.currentTarget.id)
     if (locationStore.isLocationEmpty(locationId)) {
       locationStore.removeLocation(locationId)
     } else {
-      locationStore.setDialog({
+      uiStore.setDialog({
         message: "Location must not contain kids before removing",
         type: "WARNING",
         open: true
       })
-      console.log(locationStore.dialog.message)
     }
   }
 
   render() {
-    const { locationStore } = this.props;
+    const { locationStore, uiStore } = this.props;
 
     let locations = locationStore.locations.map(location => {
       let key = `${location.name}${location.id}`
@@ -139,10 +138,12 @@ class LocationsContainer extends React.Component {
             {locations}
           </DragDropContext>
           <Dialog
-            open={locationStore.dialog.open}
-            onRequestClose={()=>locationStore.setDialog({open:false})}
+            title="Warning"
+            bodyStyle={uiStore.dialogColor}
+            open={uiStore.dialog.open}
+            onRequestClose={()=>uiStore.setDialog({open:false})}
           >
-            {locationStore.dialog.message}
+            <strong>{uiStore.dialog.message}</strong>
           </Dialog>
         </div>
     );
