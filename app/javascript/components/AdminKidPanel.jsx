@@ -48,7 +48,7 @@ class AdminKidPanel extends React.Component {
             onDrop={this.onDrop.bind(this)
             }
             >
-                <p>Drop A CSV of students here</p>
+            <p>Drop A CSV of students here</p>
           </DropZone>
           <p><a href={csv}>Download CSV Template</a></p>
           <FloatingActionButton secondary={true} style={{marginTop: 30}} >
