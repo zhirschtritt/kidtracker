@@ -72,6 +72,21 @@ class LocationsContainer extends React.Component {
     )
   }
 
+  handleRemoveLoc(e) {
+    const { locationStore } = this.props;
+    const locationId = parseInt(e.currentTarget.id)
+    if (locationStore.isLocationEmpty(locationId)) {
+      locationStore.removeLocation(locationId)
+    } else {
+      locationStore.setDialog({
+        message: "Location must not contain kids before removing",
+        type: "WARNING",
+        open: true
+      })
+      console.log(locationStore.dialog.message)
+    }
+  }
+
   render() {
     const { locationStore } = this.props;
 
@@ -81,15 +96,17 @@ class LocationsContainer extends React.Component {
         <Paper zDepth={2} style={styles.locationColumn} key={key}>
           <List>
             <div style={styles.title}>
-            <IconButton
-              style={styles.closeButton}
-              tooltip="Remove Location"
-              id={location}
-              tooltipPosition="top-left"
-              onClick={(e)=>console.log(e)}
-              >
-              <CloseIcon color={cyan500}/>
-            </IconButton>
+              <div id={location.id}
+                onClick={(e)=>this.handleRemoveLoc(e)}>
+                <IconButton
+                  style={styles.closeButton}
+                  tooltip="Remove Location"
+                  id={location.id}
+                  tooltipPosition="top-left"
+                  >
+                    <CloseIcon color={cyan500}/>
+                  </IconButton>
+              </div>
               <h2>{location.name}</h2>
               <Badge
                 badgeContent={location.kids.length}
@@ -121,6 +138,12 @@ class LocationsContainer extends React.Component {
           <DragDropContext onDragEnd={this.onDragEnd}>
             {locations}
           </DragDropContext>
+          <Dialog
+            open={locationStore.dialog.open}
+            onRequestClose={()=>locationStore.setDialog({open:false})}
+          >
+            {locationStore.dialog.message}
+          </Dialog>
         </div>
     );
   }
