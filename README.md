@@ -1,24 +1,21 @@
-# README
+## Kidtracker App
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+Designed for tracking student/camper locations for [Parts and Crafts](https://partsandcrafts.org) kid makerspace in Somerville, MA
 
-Things you may want to cover:
+[Check it out on heroku](https://kidtracker.herokuapp.com) (give it time to spool up, about 30 sec)
 
-* Ruby version
+#### Build and run locally
 
-* System dependencies
+**Requirements**:
 
-* Configuration
+Yarn:   `$ brew install yarn`
 
-* Database creation
+Foreman: `$ gem install foreman`
 
-* Database initialization
+Bundler: ` $ gem install bundler`
 
-* How to run the test suite
+**Run**
 
-* Services (job queues, cache servers, search engines, etc.)
+ `$ bundle && yarn`
 
-* Deployment instructions
-
-* ...
+Start server: `$ foreman start -f Procfile.dev `
