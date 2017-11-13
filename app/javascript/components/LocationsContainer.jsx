@@ -7,8 +7,9 @@ import Paper from 'material-ui/Paper';
 import IconMenu from 'material-ui/IconMenu';
 import MenuItem from 'material-ui/MenuItem';
 import IconButton from 'material-ui/IconButton';
+import CloseIcon from 'material-ui/svg-icons/navigation/close';
 import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
-import {cyan500} from 'material-ui/styles/colors';
+import { cyan500, indigo500 } from 'material-ui/styles/colors';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import { sortBy, find } from 'lodash';
 import { observer, inject } from 'mobx-react';
@@ -24,19 +25,23 @@ const styles = {
     flexGrow: 1,
     margin: 10
   },
-  chip: {
-    margin: 4,
-  },
   title: {
-    color: 'rgb(0, 188, 212)',
-    paddingRight: 10,
+    color: cyan500,
+    marginTop: 0,
+    paddingTop: 0,
     paddingLeft: 10,
+    paddingRight: 10,
     display: 'flex',
     justifyContent: 'center'
   },
+  closeButton: {
+    top: 0,
+    right: 20,
+    // position: 'absolute'
+  }
 };
 
-@inject('eventStore','locationStore', 'kidStore') @observer
+@inject('eventStore','locationStore', 'kidStore', 'uiStore') @observer
 class LocationsContainer extends React.Component {
   constructor(props) {
     super(props);
@@ -67,8 +72,22 @@ class LocationsContainer extends React.Component {
     )
   }
 
+  handleRemoveLoc(e) {
+    const { locationStore, uiStore } = this.props;
+    const locationId = parseInt(e.currentTarget.id)
+    if (locationStore.isLocationEmpty(locationId)) {
+      locationStore.removeLocation(locationId)
+    } else {
+      uiStore.setDialog({
+        message: "Location must not contain kids before removing",
+        type: "WARNING",
+        open: true
+      })
+    }
+  }
+
   render() {
-    const { locationStore } = this.props;
+    const { locationStore, uiStore } = this.props;
 
     let locations = locationStore.locations.map(location => {
       let key = `${location.name}${location.id}`
@@ -76,6 +95,17 @@ class LocationsContainer extends React.Component {
         <Paper zDepth={2} style={styles.locationColumn} key={key}>
           <List>
             <div style={styles.title}>
+              <div id={location.id}
+                onClick={(e)=>this.handleRemoveLoc(e)}>
+                <IconButton
+                  style={styles.closeButton}
+                  tooltip="Remove Location"
+                  id={location.id}
+                  tooltipPosition="top-left"
+                  >
+                    <CloseIcon color={cyan500}/>
+                  </IconButton>
+              </div>
               <h2>{location.name}</h2>
               <Badge
                 badgeContent={location.kids.length}
@@ -107,6 +137,14 @@ class LocationsContainer extends React.Component {
           <DragDropContext onDragEnd={this.onDragEnd}>
             {locations}
           </DragDropContext>
+          <Dialog
+            title="Warning"
+            bodyStyle={uiStore.dialogColor}
+            open={uiStore.dialog.open}
+            onRequestClose={()=>uiStore.setDialog({open:false})}
+          >
+            <strong>{uiStore.dialog.message}</strong>
+          </Dialog>
         </div>
     );
   }

@@ -22,11 +22,16 @@ class Api::V1::LocationsController < ApplicationController
     end
   end
 
+  def destroy
+    Location.destroy(params[:id])
+    render json: {message: "Deleted location with id: #{params[:id]}"}
+  end
+
   private
 
 
   def location_params
-      params.require(:location).permit(:name)
+      params.require(:location).permit(:name, :id)
   end
 
 end

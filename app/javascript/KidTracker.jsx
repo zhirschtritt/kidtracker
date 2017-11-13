@@ -6,12 +6,13 @@ import App from './components/App';
 import Admin from './components/Admin';
 import { Provider } from 'mobx-react';
 import kidStore from './stores/KidStore';
+import uiStore from './stores/UIStore';
 import locationStore from './stores/LocationStore';
 import eventStore from './stores/EventStore';
 import organizationStore from './stores/OrganizationStore';
 import Logs from './components/Logs';
 
-const stores = { kidStore, locationStore, eventStore, organizationStore };
+const stores = { kidStore, locationStore, eventStore, organizationStore, uiStore };
 window._____APP_STATE_____ = stores;
 
 const KidTracker = (props) => (

@@ -30,13 +30,14 @@ class AdminKidPanel extends React.Component {
   }
 
   onDrop(files) {
-    this.props.kidStore.parseCsv(files[0])
+    const { kidStore } = this.props
+    const status = kidStore.parseCsv(files[0], kidStore.addKids)
+    console.log(status)
   }
 
   render() {
     const { kidStore } = this.props;
-
-
+    const csv = "https://s3.amazonaws.com/kidtracker-data/test_kid_template.csv"
 
     return(
       <div style={styles.root}>
@@ -47,19 +48,18 @@ class AdminKidPanel extends React.Component {
             onDrop={this.onDrop.bind(this)
             }
             >
-              {/* <Paper style={styles.dropZone}> */}
                 <p>Drop A CSV of students here</p>
-              {/* </Paper> */}
           </DropZone>
+          <p><a href={csv}>Download CSV Template</a></p>
           <FloatingActionButton secondary={true} style={{marginTop: 30}} >
             <ContentAdd />
           </FloatingActionButton>
         </Paper>
         <Snackbar
-          open={kidStore.snackbarOpen}
-          message={kidStore.uploadState.message}
+          open={kidStore.snackbar.open}
+          message={kidStore.snackbar.message}
           autoHideDuration={10000}
-          onRequestClose={kidStore.closeSnackbar}
+          onRequestClose={()=>kidStore.snackbar.open = false}
           />
         </div>
     )

@@ -1,7 +1,7 @@
-import { observable, action } from 'mobx';
-import { find, findIndex, differenceBy, sortBy, concat, reverse } from 'lodash';
-import moment from 'moment';
-import axios from 'axios';
+import { observable, action } from 'mobx'
+import { find, findIndex, differenceBy, sortBy, concat, reverse } from 'lodash'
+import moment from 'moment'
+import axios from 'axios'
 
 class LocationStore {
   @observable locations = []
@@ -26,6 +26,18 @@ class LocationStore {
       this.state = 'error'
       console.log(error)
     })
+  }
+
+  @action
+  removeLocation(id) {
+    axios.delete('/api/v1/locations', {
+      params: {
+        id: id
+      }
+    }).then(response => {
+      this.locations = this.locations.filter(location => location.id !== id)
+      console.log(response)
+    }).catch(error => console.log(error))
   }
 
   @action
@@ -61,6 +73,13 @@ class LocationStore {
   setDefault(location_id) {
     this.defaultLocationId = location_id
   }
+
+  @action
+  isLocationEmpty(id) {
+    const location = find(this.locations, ['id', id])
+    return location.kids.length === 0
+  }
+
 
   @action
   removeFromLocation(kid, fromLocationId) {
@@ -104,4 +123,4 @@ class LocationStore {
 
 }
 
-export default new LocationStore();
+export default new LocationStore()

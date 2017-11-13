@@ -11,6 +11,10 @@ const mimeTypes = [
   'application/vnd.ms-excel']
 
 export class KidStore {
+  constructor(){
+    this.addKids = this.addKids.bind(this)
+  }
+
   @observable kids = []
   @observable state = 'loading' // 'loading' / 'done' / 'error'
   @observable uploadState = {
@@ -41,9 +45,10 @@ export class KidStore {
   }
   @action handleDetailsClose = () => {this.detailsOpen = false}
 
-
-  @observable snackbarOpen = false;
-  @action closeSnackbar = () => {this.snackbarOpen = false}
+  @observable snackbar = {
+    open: false,
+    message: ''
+  }
 
   @observable searchText = ''
   @action setSearchText = (text) => {this.searchText = text}
@@ -64,30 +69,33 @@ export class KidStore {
   }
 
   @action
-  parseCsv(csv) {
-    this.state = 'loading'
+  parseCsv(csv, callback) {
     if (mimeTypes.includes(csv.type)) {
       Papa.parse(csv, {
         skipEmptyLines: true,
-        error: this.uploadState.state = 'error',
-
-        complete: function(results) {
-          axios.post('/api/v1/kids/new', {
-            kids: results
-          })
-          .then(response => {
-            const kidCount = response.data.newKidCount
-            this.uploadState.state = 'success'
-            this.fetchAll()
-            console.log(`Uploaded ${kidCount} new kids`)
-          })
+        complete: (results) => {
+          callback(results.data)
         }
       })
     } else {
-      this.uploadState.state = 'error'
-      this.uploadState.message = 'File must be a .csv, .xls, .xlsx, or .ods'
-      this.snackbarOpen = true
-    }
+       this.snackbar.message = 'File must be a .csv, .xls, .xlsx, or .ods'
+       this.snackbar.open = true
+     }
+   }
+
+
+  @action
+  addKids(data) {
+    //[['ben','mcbenface','3/15/11'], ...]
+    axios.post('/api/v1/kids/new', {
+      kids: data
+    })
+    .then(response => {
+      const kidCount = response.data.newKidCount
+      console.log(`Uploaded ${kidCount} new kids`)
+      this.snackbar.message = `Uploaded ${kidCount} new kids`
+      this.snackbar.open = true
+    })
   }
 
   @action
