@@ -14,9 +14,7 @@ class Api::V1::KidsController < ApplicationController
     organization_id = Organization.default_organization(current_user).id
     kids.each do |kid|
       next if kid[0] == ""
-      binding.pry
       dob = Date.strptime(kid[2],'%m/%d/%Y')
-      binding.pry
       new_kid = Kid.new(
         first_name: kid[0],
         last_name: kid[1],

@@ -1,10 +1,11 @@
-import React from 'react';
-import Paper from 'material-ui/Paper';
-import Snackbar from 'material-ui/Snackbar';
-import FloatingActionButton from 'material-ui/FloatingActionButton';
-import ContentAdd from 'material-ui/svg-icons/content/add';
-import { observer, inject } from 'mobx-react';
-import DropZone from 'react-dropzone';
+import React from 'react'
+import Paper from 'material-ui/Paper'
+import Snackbar from 'material-ui/Snackbar'
+import NewKidForm from './NewKidForm'
+import FloatingActionButton from 'material-ui/FloatingActionButton'
+import ContentAdd from 'material-ui/svg-icons/content/add'
+import { observer, inject } from 'mobx-react'
+import DropZone from 'react-dropzone'
 
 const styles = {
   root: {
@@ -51,9 +52,7 @@ class AdminKidPanel extends React.Component {
                 <p>Drop A CSV of students here</p>
           </DropZone>
           <p><a href={csv}>Download CSV Template</a></p>
-          <FloatingActionButton secondary={true} style={{marginTop: 30}} >
-            <ContentAdd />
-          </FloatingActionButton>
+          <NewKidForm />
         </Paper>
         <Snackbar
           open={kidStore.snackbar.open}
@@ -61,6 +60,7 @@ class AdminKidPanel extends React.Component {
           autoHideDuration={10000}
           onRequestClose={()=>kidStore.snackbar.open = false}
           />
+
         </div>
     )
   }
